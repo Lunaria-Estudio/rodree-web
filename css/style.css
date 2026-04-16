@@ -1,0 +1,264 @@
+/* style.css - PROYECTO RODREE */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow: hidden;
+    cursor: url('../assets/cursor_palmera_original.png'), auto;
+}
+
+/* Cursor en elementos interactivos */
+a, button, .icon-item, .play-pause-btn, .progress-bar {
+    cursor: url('../assets/cursor_palmera_original.png'), pointer;
+}
+
+/* ==================== FONDO ==================== */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#video-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(1.12) saturate(1.2);
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.20);
+    backdrop-filter: blur(3px);
+}
+
+/* ==================== MENÚ LATERAL ==================== */
+.side-menu {
+    position: fixed;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    z-index: 10;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.38;
+    transition: all 0.4s ease;
+}
+
+.icon-item img {
+    width: 68px;
+    height: auto;
+    filter: invert(1);
+    transition: all 0.5s ease;
+}
+
+.icon-item span {
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.icon-item:hover {
+    opacity: 0.95;
+    transform: translateX(14px);
+}
+
+/* ==================== CONTENIDO CENTRAL ==================== */
+.content {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.brand-name {
+    font-family: 'Slackey', system-ui;
+    font-size: clamp(2.85rem, 9.2vw, 5.7rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 0.86;
+    margin-bottom: 12px;
+    text-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.6),
+        0 0 25px rgba(255, 255, 255, 0.12);
+}
+
+.tagline {
+    font-size: 0.81rem;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+    opacity: 0.58;
+    margin-bottom: 75px;
+}
+
+/* ==================== REPRODUCTOR NUBE ==================== */
+.custom-player {
+    position: relative;
+    width: 460px;
+    max-width: 92vw;
+    height: 138px;
+    background: rgba(255, 255, 255, 0.022);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.085);
+    border-radius: 72% 28% 48% 52% / 68% 82% 38% 62%;
+    padding: 0 38px;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4);
+    animation: floating 7.5s ease-in-out infinite;
+    z-index: 5;
+    transition: all 0.4s ease;
+}
+
+.custom-player.playing {
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: 0 15px 55px rgba(255, 255, 255, 0.1);
+    transform: scale(1.015);
+}
+
+/* Botón Play/Pause - Mejorado */
+.play-pause-btn {
+    width: 52px;
+    height: 52px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    flex-shrink: 0;
+    transition: all 0.35s ease;
+}
+
+.play-pause-btn:hover {
+    transform: scale(1.12);
+    background: rgba(255,255,255,0.15);
+    border-color: #fff;
+}
+
+.pause-icon {
+    display: none;
+    font-size: 17px;
+    letter-spacing: -3px;
+}
+
+.custom-player.playing .play-icon { display: none; }
+.custom-player.playing .pause-icon { display: block; }
+
+/* Track Info */
+.track-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.track-title {
+    font-size: 0.76rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    opacity: 0.82;
+    margin-bottom: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.time {
+    font-size: 0.67rem;
+    font-family: monospace;
+    opacity: 0.65;
+    min-width: 38px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+.current-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #fff;
+    border-radius: 3px;
+    transition: width 0.08s linear;
+}
+
+/* Hover barra */
+.progress-bar:hover .current-progress {
+    background: #ffdd88;
+}
+
+/* ==================== ANIMACIONES ==================== */
+@keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.view {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.8s ease forwards;
+}
+
+.view.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==================== CONTACTO (por si lo usas después) ==================== */
+.contact-container {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 60px;
+    border-radius: 40px;
+    width: 100%;
+    max-width: 500px;
+}

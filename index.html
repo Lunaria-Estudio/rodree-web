@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RODREE | Playa Digital</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Slackey&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="video-container">
+        <video autoplay muted loop playsinline id="video-bg">
+            <source src="assets/Video Playa 1080.mp4"type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+    </div>
+
+    <nav class="side-menu">
+        <div class="icon-item">
+            <img src="assets/bio.svg" alt="Bio">
+            <span>BIO</span>
+        </div>
+        <div class="icon-item">
+            <img src="assets/sets.svg" alt="Sets">
+            <span>SETS</span>
+        </div>
+        <div class="icon-item">
+            <img src="assets/filosofia.svg" alt="Filosofía">
+            <span>FILOSOFÍA</span>
+        </div>
+        <div class="icon-item">
+            <img src="assets/contacto.svg" alt="Contacto">
+            <span>CONTACTO</span>
+        </div>
+    </nav>
+
+    <main class="content">
+        <h1 class="brand-name">RODREE</h1>
+        <p class="tagline">Curaduría Sonora & Rituales Nocturnos</p>
+
+        <!-- REPRODUCTOR MEJORADO -->
+<div class="custom-player" id="custom-player">
+    <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
+        <span class="play-icon">▶</span>
+        <span class="pause-icon">❚❚</span>
+    </button>
+
+    <div class="track-info">
+        <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
+        
+        <div class="progress-container">
+            <span class="time" id="current-time">0:00</span>
+            <div class="progress-bar" id="progress-bar">
+                <div class="current-progress" id="current-progress"></div>
+            </div>
+            <span class="time" id="total-time">0:00</span>
+        </div>
+    </div>
+
+    <!-- SoundCloud Widget (oculto) -->
+    <iframe id="sc-widget" 
+            width="0" 
+            height="0" 
+            scrolling="no" 
+            frameborder="no" 
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
+    </iframe>
+</div>
+    </main>
+
+    <div class="hidden-assets">
+        <img src="assets/viento.svg" id="anim-viento" style="display:none;">
+        <img src="assets/asterisco.svg" id="anim-asterisco" style="display:none;">
+    </div>
+
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+<script>
+    const iframe = document.getElementById('sc-widget');
+    const widget = SC.Widget(iframe);
+    
+    const playBtn = document.getElementById('play-btn');
+    const customPlayer = document.getElementById('custom-player');
+    const currentProgress = document.getElementById('current-progress');
+    const currentTimeEl = document.getElementById('current-time');
+    const totalTimeEl = document.getElementById('total-time');
+    const trackTitleEl = document.getElementById('track-title');
+
+    let isPlaying = false;
+    let duration = 0;
+
+    // Formatear tiempo (segundos → mm:ss)
+    function formatTime(seconds) {
+        const min = Math.floor(seconds / 60);
+        const sec = Math.floor(seconds % 60);
+        return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    // Click en botón Play/Pause
+    playBtn.addEventListener('click', () => {
+        widget.toggle();
+    });
+
+    // Cuando el widget está listo
+    widget.bind(SC.Widget.Events.READY, () => {
+        widget.getDuration((dur) => {
+            duration = dur / 1000; // convertir a segundos
+            totalTimeEl.textContent = formatTime(duration);
+        });
+    });
+
+    // Cuando empieza a reproducir
+    widget.bind(SC.Widget.Events.PLAY, () => {
+        isPlaying = true;
+        customPlayer.classList.add('playing');
+    });
+
+    // Cuando se pausa
+    widget.bind(SC.Widget.Events.PAUSE, () => {
+        isPlaying = false;
+        customPlayer.classList.remove('playing');
+    });
+
+    // Actualizar progreso en tiempo real
+    widget.bind(SC.Widget.Events.PLAY_PROGRESS, (progress) => {
+        const percent = (progress.currentPosition / progress.duration) * 100;
+        currentProgress.style.width = percent + '%';
+
+        const currentSec = progress.currentPosition / 1000;
+        currentTimeEl.textContent = formatTime(currentSec);
+    });
+
+    // Opcional: Click en la barra para saltar a una posición
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.addEventListener('click', (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percentClicked = clickX / rect.width;
+        
+        widget.seekTo(percentClicked * duration * 1000);
+    });
+</script>
+</body>
+</html>
