@@ -7,6 +7,7 @@
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.1);
     --transition-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+    --warm-off-white: rgba(255, 253, 245, 0.9);
 }
 
 * {
@@ -298,6 +299,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     width: 100%;
     padding: 120px 20px 100px; /* Espacio para evitar solapamiento con header y menú */
     will-change: transform, opacity; /* Hardware acceleration */
+    flex-shrink: 0; /* Fix: prevents the section from collapsing, allowing natural scroll */
 }
 
 .view.active {
@@ -426,6 +428,91 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     text-transform: uppercase;
     margin-bottom: 50px;
 }
+
+/* ==================== BIO SECTION ==================== */
+.bio-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    max-width: 1000px;
+    width: 90%;
+    margin: 0 auto;
+    align-items: start; /* Fix: ensures content starts at the top to prevent clipping on long text */
+    text-align: left;
+}
+
+.bio-image-side {
+    width: 100%;
+    perspective: 1000px;
+}
+
+.bio-image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: #1a1a1a;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+/* Bio photo display */
+.bio-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bio-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(139, 94, 60, 0.2), transparent);
+    mix-blend-mode: overlay;
+}
+
+.bio-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+.bio-text {
+    color: var(--warm-off-white);
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.bio-text p {
+    margin-bottom: 24px;
+    opacity: 0.9;
+}
+
+.bio-text p:last-child {
+    font-style: italic;
+    color: var(--text-muted);
+}
+
+/* Intersection Observer Animations */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s var(--transition-luxury), transform 1.2s var(--transition-luxury);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-1 { transition-delay: 0.2s; }
+.delay-2 { transition-delay: 0.4s; }
 
 /* ==================== SETS GRID ==================== */
 .sets-grid {
@@ -631,5 +718,18 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     .set-card {
         padding: 16px;
         border-radius: 28px;
+    }
+}
+
+@media (max-width: 992px) {
+    .bio-container {
+        grid-template-columns: 1fr;
+        gap: 50px;
+        text-align: center;
+    }
+    
+    .bio-image-side {
+        max-width: 400px;
+        margin: 0 auto;
     }
 }

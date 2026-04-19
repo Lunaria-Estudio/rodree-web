@@ -23,7 +23,7 @@
     </div>
 
     <nav class="side-menu">
-        <div class="icon-item" data-section="bio-view">
+        <div class="icon-item" data-section="bio">
             <img src="assets/bio.svg" alt="Bio">
             <span>BIO</span>
         </div>
@@ -52,9 +52,23 @@
         </section>
 
         <!-- BIO -->
-        <section id="bio-view" class="view">
-            <h2 class="section-title">Bio</h2>
-            <p>Próximamente encontrarás aquí mi historia, influencias musicales y el origen de RODREE como proyecto sonoro.</p>
+        <section id="bio" class="view">
+            <div class="bio-container">
+                <div class="bio-image-side reveal-on-scroll">
+                    <div class="bio-image">
+                        <img src="assets/foto-bio-rodree.jpg" alt="RODREE" class="bio-photo">
+                    </div>
+                </div>
+                <div class="bio-content-side">
+                    <span class="bio-label reveal-on-scroll delay-1">BIO</span>
+                    <div class="bio-text reveal-on-scroll delay-2">
+                        <p>Rodrigo nació en el 91, en una casa donde siempre hubo música. La radio prendida, el tocadisco del abuelo, los equipos de audio de su viejo sonando salsa, candombe y plena. Sonidos que de chico no eligió pero que con el tiempo se le metieron en el cuerpo.</p>
+                        <p>De adolescente empezó a grabar cassets de la radio, después armaba compilaciones en CD para los viajes. Cuando llegó la computadora, llegó el Virtual DJ — y con él, las primeras fiestas caseras organizadas con su hermano, donde siempre era él el que se encargaba de la música.</p>
+                        <p>Hoy, casi dos décadas después, sigue siendo el mismo: alguien que disfruta elegir el track correcto para el momento correcto. Hace dos años se compró su primera controladora y RODREE empezó a tomar forma — no como carrera, sino como el espacio donde su gusto musical y su forma de vivir se juntan.</p>
+                        <p>Ese lugar es, casi siempre, al aire libre. Un atardecer, un amanecer, el campo o la playa. Ahí es donde RODREE suena mejor.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- SETS -->
@@ -296,10 +310,22 @@
             switchView('home-view');
         });
 
+        // === REVEAL ON SCROLL (Intersection Observer) ===
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             renderSets();
-            document.querySelector('.icon-item[data-section="bio-view"]').classList.add('active');
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+                revealObserver.observe(el);
+            });
+            document.querySelector('.icon-item[data-section="bio"]').classList.add('active');
         });
     </script>
 </body>
