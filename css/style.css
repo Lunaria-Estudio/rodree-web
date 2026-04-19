@@ -90,12 +90,15 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 /* ==================== CONTENIDO CENTRAL ==================== */
 .content {
     height: 100vh;
+    overflow-y: auto; /* Permite el scroll interno manteniendo el fondo fijo */
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
+    scrollbar-width: none; /* Opcional: oculta barra en Firefox */
 }
+
+.content::-webkit-scrollbar { display: none; } /* Opcional: oculta barra en Chrome/Safari */
 
 .brand-name {
     font-family: 'Bowlby One SC', system-ui;
@@ -241,11 +244,21 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     display: none;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start; /* Alinea el contenido al inicio para scroll natural */
+    min-height: 100vh;
+    width: 100%;
+    padding: 120px 20px 100px; /* Espacio para evitar solapamiento con header y menú */
     animation: fadeIn 0.8s ease forwards;
 }
 
 .view.active {
     display: flex;
+}
+
+/* Mantiene el Home centrado estéticamente ya que no requiere scroll */
+#home-view {
+    justify-content: center;
+    padding-top: 0;
 }
 
 @keyframes fadeIn {
@@ -258,10 +271,11 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 60px;
+    padding: 40px 20px;
     border-radius: 40px;
     width: 100%;
     max-width: 500px;
+    height: auto; /* Ensures the container grows with the Tally form */
 }
 
 /* ==================== HEADER - BOTÓN INICIO ==================== */
