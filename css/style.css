@@ -410,6 +410,102 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
 
+.section-title {
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+}
+
+/* ==================== SETS GRID ==================== */
+.sets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 20px;
+}
+
+.set-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 24px;
+    text-align: left;
+    transition: border-color 0.4s ease;
+}
+
+.set-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.set-cover-wrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.set-cover {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s var(--transition-luxury);
+}
+
+.set-card:hover .set-cover {
+    transform: scale(1.08);
+}
+
+.set-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 18px;
+    opacity: 0.9;
+}
+
+.set-listen-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 10px 24px;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    transition: all 0.4s var(--transition-luxury);
+    text-decoration: none !important;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.set-listen-btn:hover {
+    background: var(--text-main);
+    color: #000;
+}
+
+.youtube-card .yt-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.youtube-card:hover .yt-icon {
+    opacity: 0.9;
+}
+
 /* ==================== RESPONSIVE OPTIMIZATION ==================== */
 @media (max-width: 768px) {
     /* 1. El Menú se mueve abajo para pulgares cómodos */

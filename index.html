@@ -60,7 +60,39 @@
         <!-- SETS -->
         <section id="sets-view" class="view">
             <h2 class="section-title">Sets</h2>
-            <p>Próximamente podrás explorar los sets completos, sesiones en vivo y grabaciones exclusivas.</p>
+            <div class="sets-grid">
+                <div class="set-card">
+                    <div class="set-cover-wrapper">
+                        <div class="set-cover" style="background-image: url('assets/cover-set1.jpg');"></div>
+                    </div>
+                    <h3 class="set-title">Amanecer Tribal</h3>
+                    <button class="set-listen-btn" onclick="loadTrack(0)">Escuchar</button>
+                </div>
+                <div class="set-card">
+                    <div class="set-cover-wrapper">
+                        <div class="set-cover" style="background-image: url('assets/cover-set2.jpg');"></div>
+                    </div>
+                    <h3 class="set-title">Afro Set VOL1</h3>
+                    <button class="set-listen-btn" onclick="loadTrack(1)">Escuchar</button>
+                </div>
+                <div class="set-card">
+                    <div class="set-cover-wrapper">
+                        <div class="set-cover" style="background-image: url('assets/cover-set3.jpg');"></div>
+                    </div>
+                    <h3 class="set-title">Afro & Latin House</h3>
+                    <button class="set-listen-btn" onclick="loadTrack(2)">Escuchar</button>
+                </div>
+                <div class="set-card youtube-card">
+                    <div class="set-cover-wrapper">
+                        <div class="set-cover" style="background-image: url('assets/cover-yt.jpg');"></div>
+                        <div class="yt-icon">▶</div>
+                    </div>
+                    <h3 class="set-title">Sesión en Vivo</h3>
+                    <a href="https://youtu.be/mTbgNrgw9NM" target="_blank" rel="noopener noreferrer" class="set-listen-btn" id="yt-set-link">
+                        Ver Video
+                    </a>
+                </div>
+            </div>
         </section>
 
         <!-- FILOSOFÍA -->
@@ -208,6 +240,15 @@
             currentProgress.style.width = percent + '%';
             currentTimeEl.textContent = formatTime(progress.currentPosition / 1000);
         });
+
+        // === YOUTUBE PAUSE HOOK ===
+        // This ensures the ambient set stops when navigating to the video
+        const ytLink = document.getElementById('yt-set-link');
+        if (ytLink) {
+            ytLink.addEventListener('click', () => {
+                widget.pause();
+            });
+        }
 
         // === SEEKING LOGIC ===
         const progressBar = document.getElementById('progress-bar');
