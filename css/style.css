@@ -1,5 +1,14 @@
 /* style.css - PROYECTO RODREE */
 
+:root {
+    --bg-dark: #000;
+    --text-main: #fff;
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --transition-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,8 +16,8 @@
 }
 
 body {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     overflow: hidden;
@@ -43,7 +52,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.20);
+    background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(3px);
 }
 
@@ -95,6 +104,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    touch-action: pan-y;
     scrollbar-width: none; /* Opcional: oculta barra en Firefox */
 }
 
@@ -113,18 +123,20 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
         0 0 28px rgba(255, 255, 255, 0.10);
 }
 
-
 .tagline {
     font-size: 0.81rem;
     letter-spacing: 0.38em;
     text-transform: uppercase;
-    opacity: 0.58;
+    color: var(--text-muted);
     margin-bottom: 75px;
 }
 
 /* ==================== REPRODUCTOR NUBE ==================== */
 .custom-player {
-    position: relative;
+    /* Merged and standardized player properties */
+    position: fixed !important; 
+    bottom: 15%;
+    z-index: 100;
     width: 460px;
     max-width: 92vw;
     height: 138px;
@@ -139,8 +151,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     gap: 26px;
     box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4);
     animation: floating 7.5s ease-in-out infinite;
-    z-index: 5;
-    transition: all 0.4s ease;
+    transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s ease;
 }
 
 .custom-player.playing {
@@ -160,7 +171,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    color: #fff;
+    color: var(--text-main);
     flex-shrink: 0;
     transition: all 0.35s ease;
 }
@@ -268,10 +279,10 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 
 /* ==================== CONTACTO (SOCIAL HUB) ==================== */
 .contact-container {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     padding: 60px 40px;
     border-radius: 40px;
     width: 100%;
@@ -284,8 +295,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 }
 
 .contact-email {
-    font-family: 'Inter', sans-serif;
-    color: #fff;
+    color: var(--text-main);
     text-decoration: none;
     font-size: 1.1rem;
     letter-spacing: 0.05em;
@@ -303,8 +313,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 }
 
 .social-links a {
-    font-family: 'Inter', sans-serif;
-    color: #fff;
+    color: var(--text-main);
     text-decoration: none;
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -320,21 +329,20 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 
 /* Botón Cotizar - Quiet Luxury Style */
 .cta-button {
-    font-family: 'Inter', sans-serif;
     display: inline-block;
     padding: 18px 42px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--text-muted);
     background: transparent;
-    color: #fff;
+    color: var(--text-main);
     text-decoration: none;
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.25em;
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.6s var(--transition-luxury);
 }
 
 .cta-button:hover {
-    background: #fff;
+    background: var(--text-main);
     color: #000;
     transform: scale(1.02);
 }
@@ -360,31 +368,22 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     font-size: 1.45rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--text-main);
     padding: 10px 22px;
     border-radius: 30px;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    cursor: pointer;                    /* ← Cursor como enlace */
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
     transition: all 0.4s ease;
     text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
 }
 
 #home-logo:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
-}
-
-/* Suavizado para el reproductor */
-.custom-player {
-    transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s ease;
-    /* Aseguramos que sea fijo para que no se mueva con el scroll de las bios */
-    position: fixed !important; 
-    bottom: 15%;
-    z-index: 100;
 }
 
 /* ==================== RESPONSIVE OPTIMIZATION ==================== */
