@@ -20,38 +20,39 @@
     </div>
 
     <nav class="side-menu">
-        <div class="icon-item">
-            <img src="assets/bio.svg" alt="Bio">
-            <span>BIO</span>
-        </div>
-        <div class="icon-item">
-            <img src="assets/sets.svg" alt="Sets">
-            <span>SETS</span>
-        </div>
-        <div class="icon-item">
-            <img src="assets/filosofia.svg" alt="Filosofía">
-            <span>FILOSOFÍA</span>
-        </div>
-        <div class="icon-item">
-            <img src="assets/contacto.svg" alt="Contacto">
-            <span>CONTACTO</span>
-        </div>
-    </nav>
+    <div class="icon-item active" data-section="home-view">
+        <img src="assets/bio.svg" alt="Bio">
+        <span>BIO</span>
+    </div>
+    <div class="icon-item" data-section="sets-view">
+        <img src="assets/sets.svg" alt="Sets">
+        <span>SETS</span>
+    </div>
+    <div class="icon-item" data-section="filosofia-view">
+        <img src="assets/filosofia.svg" alt="Filosofía">
+        <span>FILOSOFÍA</span>
+    </div>
+    <div class="icon-item" data-section="contacto-view">
+        <img src="assets/contacto.svg" alt="Contacto">
+        <span>CONTACTO</span>
+    </div>
+</nav>
 
-    <main class="content">
+   <main class="content">
+
+    <!-- HOME VIEW - Landing actual -->
+    <section id="home-view" class="view active">
         <h1 class="brand-name">RODREE</h1>
         <p class="tagline">Curaduría Sonora & Rituales Nocturnos</p>
-
+        
         <!-- REPRODUCTOR MEJORADO -->
         <div class="custom-player" id="custom-player">
             <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
                 <span class="play-icon">▶</span>
                 <span class="pause-icon">❚❚</span>
             </button>
-
             <div class="track-info">
                 <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
-        
                 <div class="progress-container">
                     <span class="time" id="current-time">0:00</span>
                     <div class="progress-bar" id="progress-bar">
@@ -60,19 +61,45 @@
                     <span class="time" id="total-time">0:00</span>
                 </div>
             </div>
-
             <!-- SoundCloud Widget (oculto) -->
-            <iframe id="sc-widget" 
-                    width="0" 
-                    height="0" 
-                    scrolling="no" 
-                    frameborder="no" 
+            <iframe id="sc-widget"
+                    width="0"
+                    height="0"
+                    scrolling="no"
+                    frameborder="no"
                     allow="autoplay"
                     src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
             </iframe>
         </div>
-    </main>
+    </section>
 
+    <!-- BIO VIEW -->
+    <section id="bio-view" class="view">
+        <h2 class="section-title">Bio</h2>
+        <p>Próximamente encontrarás aquí mi historia, influencias musicales y el origen de RODREE como proyecto sonoro.</p>
+    </section>
+
+    <!-- SETS VIEW -->
+    <section id="sets-view" class="view">
+        <h2 class="section-title">Sets</h2>
+        <p>Próximamente podrás explorar los sets completos, sesiones en vivo y grabaciones exclusivas.</p>
+    </section>
+
+    <!-- FILOSOFÍA VIEW -->
+    <section id="filosofia-view" class="view">
+        <h2 class="section-title">Filosofía</h2>
+        <p>Próximamente la filosofía detrás de RODREE: rituales nocturnos, conexión con la naturaleza y la curaduría sonora como forma de vida.</p>
+    </section>
+
+    <!-- CONTACTO VIEW -->
+    <section id="contacto-view" class="view">
+        <h2 class="section-title">Contacto</h2>
+        <div class="contact-container">
+            <p>El formulario de contacto estará disponible pronto. Mientras tanto, podés escribirme a través de Instagram o email.</p>
+        </div>
+    </section>
+
+</main>
     <div class="hidden-assets">
         <img src="assets/viento.svg" id="anim-viento" style="display:none;">
         <img src="assets/asterisco.svg" id="anim-asterisco" style="display:none;">
@@ -144,5 +171,42 @@
             widget.seekTo(percentClicked * duration * 1000);
         });
     </script>
+    <script>
+    // Seleccionamos todos los items del menú y las vistas
+    const menuItems = document.querySelectorAll('.icon-item');
+    const views = document.querySelectorAll('.view');
+
+    // Función para cambiar de sección
+    function switchView(sectionId) {
+        // Quitar 'active' de todas las vistas y menú
+        views.forEach(view => view.classList.remove('active'));
+        menuItems.forEach(item => item.classList.remove('active'));
+
+        // Activar la vista seleccionada
+        const targetView = document.getElementById(sectionId);
+        if (targetView) {
+            targetView.classList.add('active');
+        }
+
+        // Activar el ícono del menú
+        const activeMenuItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
+        if (activeMenuItem) {
+            activeMenuItem.classList.add('active');
+        }
+    }
+
+    // Agregar evento click a cada ítem del menú
+    menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const sectionId = item.getAttribute('data-section');
+            switchView(sectionId);
+        });
+    });
+
+    // Opcional: Permitir volver al home haciendo clic en el logo (si querés)
+    document.querySelector('.brand-name').addEventListener('click', () => {
+        switchView('home-view');
+    });
+</script>
 </body>
 </html>
