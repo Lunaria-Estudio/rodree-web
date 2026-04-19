@@ -98,17 +98,18 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 }
 
 .brand-name {
-    font-family: 'Slackey', system-ui;
-    font-size: clamp(2.85rem, 9.2vw, 5.7rem);
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: clamp(3.0rem, 9.8vw, 6.4rem);     /* ← Entre las dos versiones */
     font-weight: 400;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
-    line-height: 0.86;
-    margin-bottom: 12px;
+    line-height: 0.84;
+    margin-bottom: 15px;
     text-shadow: 
-        0 4px 16px rgba(0, 0, 0, 0.6),
-        0 0 25px rgba(255, 255, 255, 0.12);
+        0 4px 16px rgba(0, 0, 0, 0.55),
+        0 0 28px rgba(255, 255, 255, 0.10);
 }
+
 
 .tagline {
     font-size: 0.81rem;
