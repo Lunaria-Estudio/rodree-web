@@ -36,7 +36,8 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
+    height: 100dvh; /* iOS Safari Address Bar Fix */
     z-index: -1;
 }
 
@@ -44,6 +45,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     filter: brightness(1.12) saturate(1.2);
 }
 
@@ -292,8 +294,10 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     align-items: center;
     justify-content: flex-start; /* Alinea el contenido al inicio para scroll natural */
     min-height: 100vh;
+    min-height: 100dvh;
     width: 100%;
     padding: 120px 20px 100px; /* Espacio para evitar solapamiento con header y menú */
+    will-change: transform, opacity; /* Hardware acceleration */
 }
 
 .view.active {
@@ -445,6 +449,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     flex-direction: column;
     overflow: hidden; /* Evita que el contenido desborde los bordes redondeados */
     opacity: 0; /* Preparado para animación staggered */
+    will-change: transform, opacity;
 }
 
 .set-card:hover {
@@ -564,23 +569,31 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
         top: auto;
         bottom: 0;
         width: 100%;
-        height: 75px;
+        height: 85px; /* Touch target area optimization */
         flex-direction: row;
         justify-content: space-around;
-        padding: 0 10px 15px 10px;
+        padding: 10px 15px 25px 15px;
         background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
         transform: none;
+        z-index: 1000;
     }
 
-    .icon-item { gap: 4px; opacity: 0.6; }
-    .icon-item img { width: 32px; }
-    .icon-item span { font-size: 0.5rem; }
+    .icon-item { 
+        gap: 6px; 
+        opacity: 0.7; 
+        min-width: 60px; /* Minimum width for touch targets */
+        padding: 5px;
+    }
+    .icon-item img { width: 38px; }
+    .icon-item span { font-size: 0.6rem; letter-spacing: 0.15em; }
 
     /* 2. El nombre RODREE se ajusta al ancho del celu */
     .brand-name {
         font-size: 3.2rem;
         margin-bottom: 10px;
+        padding: 0 15px;
     }
 
     .tagline {
@@ -592,11 +605,31 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     /* 3. El Reproductor en móvil se achica un poco */
     .custom-player {
         width: 90vw;
-        height: 110px;
-        padding: 0 20px;
-        bottom: 100px; /* Para que no tape el menú de abajo */
+        height: 125px;
+        padding: 0 25px;
+        bottom: 105px; /* Safe space from bottom menu */
+        gap: 15px;
     }
     
-    .track-title { font-size: 0.65rem; }
-    .play-pause-btn { width: 44px; height: 44px; }
+    .track-title { font-size: 0.7rem; }
+    .play-pause-btn { 
+        width: 48px; 
+        height: 48px; 
+        background: rgba(255, 255, 255, 0.1); /* Better visibility for touch */
+    }
+    
+    .next-btn {
+        padding: 12px; /* Increased hit area for Next button */
+        font-size: 24px;
+    }
+
+    /* 4. Sets Cards Polish */
+    .sets-grid {
+        gap: 25px;
+        padding: 0 5px;
+    }
+    .set-card {
+        padding: 16px;
+        border-radius: 28px;
+    }
 }
