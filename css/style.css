@@ -422,29 +422,35 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 .sets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 32px;
+    gap: 40px;
     width: 100%;
     max-width: 1100px;
     margin-top: 20px;
+    align-items: stretch; /* Asegura que todas las cards midan lo mismo en la misma fila */
 }
 
 .set-card {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 32px; /* Cohesive with player rounding */
     padding: 24px;
     text-align: left;
-    transition: border-color 0.4s ease;
+    transition: all 0.6s var(--transition-luxury);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evita que el contenido desborde los bordes redondeados */
 }
 
 .set-card:hover {
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--glass-border);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .set-cover-wrapper {
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 14px;
+    border-radius: 32px;
     overflow: hidden;
     margin-bottom: 20px;
     position: relative;
@@ -454,13 +460,25 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 .set-cover {
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: transform 0.6s var(--transition-luxury);
+    object-fit: cover;
+    object-position: center; /* Centra las portadas 1:1 de SoundCloud al recortar a 16:9 */
+    transition: transform 1.2s var(--transition-luxury), filter 0.8s ease;
+    filter: brightness(0.7) contrast(1.1); /* Subtle dark overlay effect */
+}
+
+.set-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.4));
+    pointer-events: none;
 }
 
 .set-card:hover .set-cover {
-    transform: scale(1.08);
+    transform: scale(1.05);
+    filter: brightness(0.9) contrast(1.1);
 }
 
 .set-title {
@@ -484,6 +502,8 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     text-decoration: none !important;
     display: inline-block;
     cursor: pointer;
+    margin-top: auto; /* Empuja el botón al final de la tarjeta para alineación perfecta */
+    align-self: flex-start;
 }
 
 .set-listen-btn:hover {

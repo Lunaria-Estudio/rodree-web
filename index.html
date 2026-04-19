@@ -60,38 +60,8 @@
         <!-- SETS -->
         <section id="sets-view" class="view">
             <h2 class="section-title">Sets</h2>
-            <div class="sets-grid">
-                <div class="set-card">
-                    <div class="set-cover-wrapper">
-                        <div class="set-cover" style="background-image: url('assets/cover-set1.jpg');"></div>
-                    </div>
-                    <h3 class="set-title">Amanecer Tribal</h3>
-                    <button class="set-listen-btn" onclick="loadTrack(0)">Escuchar</button>
-                </div>
-                <div class="set-card">
-                    <div class="set-cover-wrapper">
-                        <div class="set-cover" style="background-image: url('assets/cover-set2.jpg');"></div>
-                    </div>
-                    <h3 class="set-title">Afro Set VOL1</h3>
-                    <button class="set-listen-btn" onclick="loadTrack(1)">Escuchar</button>
-                </div>
-                <div class="set-card">
-                    <div class="set-cover-wrapper">
-                        <div class="set-cover" style="background-image: url('assets/cover-set3.jpg');"></div>
-                    </div>
-                    <h3 class="set-title">Afro & Latin House</h3>
-                    <button class="set-listen-btn" onclick="loadTrack(2)">Escuchar</button>
-                </div>
-                <div class="set-card youtube-card">
-                    <div class="set-cover-wrapper">
-                        <div class="set-cover" style="background-image: url('assets/cover-yt.jpg');"></div>
-                        <div class="yt-icon">▶</div>
-                    </div>
-                    <h3 class="set-title">Sesión en Vivo</h3>
-                    <a href="https://youtu.be/mTbgNrgw9NM" target="_blank" rel="noopener noreferrer" class="set-listen-btn" id="yt-set-link">
-                        Ver Video
-                    </a>
-                </div>
+            <div class="sets-grid" id="sets-grid">
+                <!-- Contenido generado dinámicamente -->
             </div>
         </section>
 
@@ -171,9 +141,10 @@
         let duration = 0;
 
         const playlist = [
-            { title: "RODREE | Amanecer Tribal", id: "2262729761" },
-            { title: "RODREE | Afro Set VOL1", id: "2068822248" },
-            { title: "RODREE | Afro & Latin House", id: "1720443096" }
+            { title: "RODREE | Nocturnal Ritual", id: "2262729761", image: "https://i1.sndcdn.com/artworks-zRWv8x0LY2Id8kBL-DOP5Pg-t1080x1080.jpg", type: "soundcloud" }, // Add artwork URL here
+            { title: "RODREE | Afro Set VOL1", id: "2068822248", image: "https://i1.sndcdn.com/artworks-QIyEEKeWfoW1L2Fz-DhJHDA-t1080x1080.png", type: "soundcloud" }, // Add artwork URL here
+            { title: "RODREE | Afro & Latin House", id: "1720443096", image: "https://i1.sndcdn.com/artworks-5zIz7OMSSx3zV4ei-JjzmaQ-t1080x1080.jpg", type: "soundcloud" }, // Add artwork URL here
+            { title: "Sesión en Vivo", id: "mTbgNrgw9NM", image: "https://img.youtube.com/vi/mTbgNrgw9NM/maxresdefault.jpg", type: "youtube" }
         ];
 
         function loadTrack(index) {
@@ -192,6 +163,37 @@
                 show_teaser: false,
                 auto_play: true
             });
+        }
+
+        function renderSets() {
+            const grid = document.getElementById('sets-grid');
+            if (!grid) return;
+
+            grid.innerHTML = playlist.map((set, index) => {
+                const isYT = set.type === 'youtube';
+                return `
+                    <div class="set-card ${isYT ? 'youtube-card' : ''}">
+                        <div class="set-cover-wrapper">
+                            <img src="${set.image}" alt="${set.title}" class="set-cover" loading="lazy">
+                            <div class="set-overlay"></div>
+                            ${isYT ? '<div class="yt-icon">▶</div>' : ''}
+                        </div>
+                        <h3 class="set-title">${set.title}</h3>
+                        ${isYT ? 
+                            `<a href="https://youtu.be/${set.id}" target="_blank" rel="noopener noreferrer" class="set-listen-btn" id="yt-set-link">Ver Video</a>` :
+                            `<button class="set-listen-btn" onclick="loadTrack(${index})">Escuchar</button>`
+                        }
+                    </div>
+                `;
+            }).join('');
+
+            // Re-vincular el hook de pausa para YouTube
+            const ytLink = document.getElementById('yt-set-link');
+            if (ytLink) {
+                ytLink.addEventListener('click', () => {
+                    widget.pause();
+                });
+            }
         }
 
         function formatTime(seconds) {
@@ -240,15 +242,6 @@
             currentProgress.style.width = percent + '%';
             currentTimeEl.textContent = formatTime(progress.currentPosition / 1000);
         });
-
-        // === YOUTUBE PAUSE HOOK ===
-        // This ensures the ambient set stops when navigating to the video
-        const ytLink = document.getElementById('yt-set-link');
-        if (ytLink) {
-            ytLink.addEventListener('click', () => {
-                widget.pause();
-            });
-        }
 
         // === SEEKING LOGIC ===
         const progressBar = document.getElementById('progress-bar');
@@ -305,6 +298,7 @@
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
+            renderSets();
             document.querySelector('.icon-item[data-section="bio-view"]').classList.add('active');
         });
     </script>
