@@ -6,7 +6,7 @@
     --text-muted: rgba(255, 255, 255, 0.6);
     --glass-bg: rgba(255, 255, 255, 0.03);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --transition-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-luxury: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -21,12 +21,13 @@ body {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
     cursor: url('../assets/cursor_palmera_original.png'), auto;
 }
 
 /* Cursor en elementos interactivos */
 a, button, .icon-item, .play-pause-btn, .progress-bar {
-    cursor: url('../assets/cursor_palmera_original.png'), pointer;
+    cursor: url('../assets/cursor_palmera_original.png'), pointer !important;
 }
 
 /* ==================== FONDO ==================== */
@@ -74,7 +75,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     align-items: center;
     gap: 8px;
     opacity: 0.38;
-    transition: all 0.4s ease;
+    transition: opacity 0.6s var(--transition-luxury), transform 0.6s var(--transition-luxury);
 }
 
 .icon-item img {
@@ -94,6 +95,11 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 .icon-item:hover {
     opacity: 0.95;
     transform: translateX(14px);
+}
+
+.icon-item:active {
+    transform: translateX(10px) scale(0.96);
+    transition: transform 0.1s var(--transition-luxury);
 }
 
 /* ==================== CONTENIDO CENTRAL ==================== */
@@ -151,7 +157,8 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     gap: 30px;
     box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4);
     animation: floating 7.5s ease-in-out infinite;
-    transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s ease;
+    transition: opacity 0.8s var(--transition-luxury), transform 0.8s var(--transition-luxury), 
+                background-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .custom-player.playing {
@@ -180,13 +187,17 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     font-size: 20px;
     color: var(--text-main);
     flex-shrink: 0;
-    transition: all 0.35s ease;
+    transition: transform 0.4s var(--transition-luxury), background-color 0.4s ease;
 }
 
 .play-pause-btn:hover {
     transform: scale(1.12);
     background: rgba(255,255,255,0.15);
     border-color: #fff;
+}
+
+.play-pause-btn:active {
+    transform: scale(0.94);
 }
 
 .next-btn {
@@ -283,21 +294,15 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     min-height: 100vh;
     width: 100%;
     padding: 120px 20px 100px; /* Espacio para evitar solapamiento con header y menú */
-    animation: fadeIn 0.8s ease forwards;
 }
 
 .view.active {
     display: flex;
+    animation: viewEntrance 0.6s var(--transition-luxury) forwards;
 }
 
-/* Mantiene el Home centrado estéticamente ya que no requiere scroll */
-#home-view {
-    justify-content: center;
-    padding-top: 0;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
+@keyframes viewEntrance {
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -435,16 +440,36 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     border-radius: 32px; /* Cohesive with player rounding */
     padding: 24px;
     text-align: left;
-    transition: all 0.6s var(--transition-luxury);
+    transition: border-color 0.6s var(--transition-luxury), transform 0.6s var(--transition-luxury), background-color 0.6s var(--transition-luxury);
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Evita que el contenido desborde los bordes redondeados */
+    opacity: 0; /* Preparado para animación staggered */
 }
 
 .set-card:hover {
     border-color: var(--glass-border);
     transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.05);
+}
+
+/* Staggered Grid Animation Trigger */
+.view.active .set-card {
+    animation: cardEntrance 0.8s var(--transition-luxury) forwards;
+}
+
+@keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.set-card:nth-child(1) { animation-delay: 0.1s; }
+.set-card:nth-child(2) { animation-delay: 0.2s; }
+.set-card:nth-child(3) { animation-delay: 0.3s; }
+.set-card:nth-child(4) { animation-delay: 0.4s; }
+
+.set-card:active {
+    transform: scale(0.985) translateY(-2px);
 }
 
 .set-cover-wrapper {
@@ -463,6 +488,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     object-fit: cover;
     object-position: center; /* Centra las portadas 1:1 de SoundCloud al recortar a 16:9 */
     transition: transform 1.2s var(--transition-luxury), filter 0.8s ease;
+    will-change: transform;
     filter: brightness(0.7) contrast(1.1); /* Subtle dark overlay effect */
 }
 
@@ -498,7 +524,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    transition: all 0.4s var(--transition-luxury);
+    transition: background-color 0.4s var(--transition-luxury), color 0.4s var(--transition-luxury), transform 0.2s ease;
     text-decoration: none !important;
     display: inline-block;
     cursor: pointer;
@@ -509,6 +535,10 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 .set-listen-btn:hover {
     background: var(--text-main);
     color: #000;
+}
+
+.set-listen-btn:active {
+    transform: scale(0.95);
 }
 
 .youtube-card .yt-icon {
