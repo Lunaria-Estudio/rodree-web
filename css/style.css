@@ -266,16 +266,77 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==================== CONTACTO (por si lo usas después) ==================== */
+/* ==================== CONTACTO (SOCIAL HUB) ==================== */
 .contact-container {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 40px 20px;
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 60px 40px;
     border-radius: 40px;
     width: 100%;
-    max-width: 500px;
-    height: auto; /* Ensures the container grows with the Tally form */
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.contact-email {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.contact-email:hover {
+    opacity: 1;
+}
+
+.social-links {
+    display: flex;
+    gap: 30px;
+}
+
+.social-links a {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.5;
+    transition: all 0.4s ease;
+}
+
+.social-links a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+/* Botón Cotizar - Quiet Luxury Style */
+.cta-button {
+    font-family: 'Inter', sans-serif;
+    display: inline-block;
+    padding: 18px 42px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cta-button:hover {
+    background: #fff;
+    color: #000;
+    transform: scale(1.02);
 }
 
 /* ==================== HEADER - BOTÓN INICIO ==================== */
