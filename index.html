@@ -48,30 +48,7 @@
             <h1 class="brand-name">RODREE</h1>
             <p class="tagline">Curaduría Sonora & Rituales Nocturnos</p>
 
-            <div class="custom-player" id="custom-player">
-                <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
-                    <span class="play-icon">▶</span>
-                    <span class="pause-icon">❚❚</span>
-                </button>
-                <div class="track-info">
-                    <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
-                    <div class="progress-container">
-                        <span class="time" id="current-time">0:00</span>
-                        <div class="progress-bar" id="progress-bar">
-                            <div class="current-progress" id="current-progress"></div>
-                        </div>
-                        <span class="time" id="total-time">0:00</span>
-                    </div>
-                </div>
-                <iframe id="sc-widget" 
-                        width="0" 
-                        height="0" 
-                        scrolling="no" 
-                        frameborder="no" 
-                        allow="autoplay"
-                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
-                </iframe>
-            </div>
+            
         </section>
 
         <!-- BIO -->
@@ -99,6 +76,31 @@
                 <p>El formulario de contacto estará disponible pronto. Mientras tanto, podés escribirme a través de Instagram o email.</p>
             </div>
         </section>
+
+        <div class="custom-player" id="custom-player">
+                <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
+                    <span class="play-icon">▶</span>
+                    <span class="pause-icon">❚❚</span>
+                </button>
+                <div class="track-info">
+                    <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
+                    <div class="progress-container">
+                        <span class="time" id="current-time">0:00</span>
+                        <div class="progress-bar" id="progress-bar">
+                            <div class="current-progress" id="current-progress"></div>
+                        </div>
+                        <span class="time" id="total-time">0:00</span>
+                    </div>
+                </div>
+                <iframe id="sc-widget" 
+                        width="0" 
+                        height="0" 
+                        scrolling="no" 
+                        frameborder="no" 
+                        allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
+                </iframe>
+            </div>
 
     </main>
 
@@ -151,22 +153,27 @@
         const mainHeader = document.getElementById('main-header');
 
         function switchView(sectionId) {
-            views.forEach(v => v.classList.remove('active'));
-            menuItems.forEach(i => i.classList.remove('active'));
+    views.forEach(v => v.classList.remove('active'));
+    menuItems.forEach(i => i.classList.remove('active'));
 
-            const target = document.getElementById(sectionId);
-            if (target) target.classList.add('active');
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add('active');
 
-            const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
-            if (activeItem) activeItem.classList.add('active');
+    const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
+    if (activeItem) activeItem.classList.add('active');
 
-            // Mostrar/Ocultar botón "INICIO"
-            if (sectionId === 'home-view') {
-                mainHeader.classList.remove('visible');
-            } else {
-                mainHeader.classList.add('visible');
-            }
-        }
+    // --- CONTROL DE VISIBILIDAD DEL REPRODUCTOR ---
+    const player = document.getElementById('custom-player');
+    if (sectionId === 'home-view') {
+        mainHeader.classList.remove('visible');
+        player.style.opacity = "1";
+        player.style.pointerEvents = "auto";
+    } else {
+        mainHeader.classList.add('visible');
+        player.style.opacity = "0";          /* Se vuelve invisible */
+        player.style.pointerEvents = "none";   /* No se puede clickear si no se ve */
+    }
+}
 
         menuItems.forEach(item => {
             item.addEventListener('click', () => {

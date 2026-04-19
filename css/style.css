@@ -302,3 +302,57 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     transform: translateY(-2px);
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
 }
+
+/* Suavizado para el reproductor */
+.custom-player {
+    transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s ease;
+    /* Aseguramos que sea fijo para que no se mueva con el scroll de las bios */
+    position: fixed !important; 
+    bottom: 15%;
+    z-index: 100;
+}
+
+/* ==================== RESPONSIVE OPTIMIZATION ==================== */
+@media (max-width: 768px) {
+    /* 1. El Menú se mueve abajo para pulgares cómodos */
+    .side-menu {
+        left: 0;
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 75px;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 10px 15px 10px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(15px);
+        transform: none;
+    }
+
+    .icon-item { gap: 4px; opacity: 0.6; }
+    .icon-item img { width: 32px; }
+    .icon-item span { font-size: 0.5rem; }
+
+    /* 2. El nombre RODREE se ajusta al ancho del celu */
+    .brand-name {
+        font-size: 3.2rem;
+        margin-bottom: 10px;
+    }
+
+    .tagline {
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        padding: 0 20px;
+    }
+
+    /* 3. El Reproductor en móvil se achica un poco */
+    .custom-player {
+        width: 90vw;
+        height: 110px;
+        padding: 0 20px;
+        bottom: 100px; /* Para que no tape el menú de abajo */
+    }
+    
+    .track-title { font-size: 0.65rem; }
+    .play-pause-btn { width: 44px; height: 44px; }
+}
