@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RODREE | Playa Digital</title>
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+    <!-- HEADER - Botón "INICIO" (solo visible fuera del Home) -->
+    <header id="main-header" class="main-header">
+        <div id="home-logo">INICIO</div>
+    </header>
 
     <div class="video-container">
         <video autoplay muted loop playsinline id="video-bg">
@@ -20,86 +23,85 @@
     </div>
 
     <nav class="side-menu">
-    <div class="icon-item active" data-section="home-view">
-        <img src="assets/bio.svg" alt="Bio">
-        <span>BIO</span>
-    </div>
-    <div class="icon-item" data-section="sets-view">
-        <img src="assets/sets.svg" alt="Sets">
-        <span>SETS</span>
-    </div>
-    <div class="icon-item" data-section="filosofia-view">
-        <img src="assets/filosofia.svg" alt="Filosofía">
-        <span>FILOSOFÍA</span>
-    </div>
-    <div class="icon-item" data-section="contacto-view">
-        <img src="assets/contacto.svg" alt="Contacto">
-        <span>CONTACTO</span>
-    </div>
-</nav>
+        <div class="icon-item" data-section="bio-view">
+            <img src="assets/bio.svg" alt="Bio">
+            <span>BIO</span>
+        </div>
+        <div class="icon-item" data-section="sets-view">
+            <img src="assets/sets.svg" alt="Sets">
+            <span>SETS</span>
+        </div>
+        <div class="icon-item" data-section="filosofia-view">
+            <img src="assets/filosofia.svg" alt="Filosofía">
+            <span>FILOSOFÍA</span>
+        </div>
+        <div class="icon-item" data-section="contacto-view">
+            <img src="assets/contacto.svg" alt="Contacto">
+            <span>CONTACTO</span>
+        </div>
+    </nav>
 
-   <main class="content">
+    <main class="content">
 
-    <!-- HOME VIEW - Landing actual -->
-    <section id="home-view" class="view active">
-        <h1 class="brand-name">RODREE</h1>
-        <p class="tagline">Curaduría Sonora & Rituales Nocturnos</p>
-        
-        <!-- REPRODUCTOR MEJORADO -->
-        <div class="custom-player" id="custom-player">
-            <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
-                <span class="play-icon">▶</span>
-                <span class="pause-icon">❚❚</span>
-            </button>
-            <div class="track-info">
-                <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
-                <div class="progress-container">
-                    <span class="time" id="current-time">0:00</span>
-                    <div class="progress-bar" id="progress-bar">
-                        <div class="current-progress" id="current-progress"></div>
+        <!-- HOME VIEW -->
+        <section id="home-view" class="view active">
+            <h1 class="brand-name">RODREE</h1>
+            <p class="tagline">Curaduría Sonora & Rituales Nocturnos</p>
+
+            <div class="custom-player" id="custom-player">
+                <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
+                    <span class="play-icon">▶</span>
+                    <span class="pause-icon">❚❚</span>
+                </button>
+                <div class="track-info">
+                    <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
+                    <div class="progress-container">
+                        <span class="time" id="current-time">0:00</span>
+                        <div class="progress-bar" id="progress-bar">
+                            <div class="current-progress" id="current-progress"></div>
+                        </div>
+                        <span class="time" id="total-time">0:00</span>
                     </div>
-                    <span class="time" id="total-time">0:00</span>
                 </div>
+                <iframe id="sc-widget" 
+                        width="0" 
+                        height="0" 
+                        scrolling="no" 
+                        frameborder="no" 
+                        allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
+                </iframe>
             </div>
-            <!-- SoundCloud Widget (oculto) -->
-            <iframe id="sc-widget"
-                    width="0"
-                    height="0"
-                    scrolling="no"
-                    frameborder="no"
-                    allow="autoplay"
-                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2262729761&show_user=false&hide_related=true&show_comments=false&show_teaser=false">
-            </iframe>
-        </div>
-    </section>
+        </section>
 
-    <!-- BIO VIEW -->
-    <section id="bio-view" class="view">
-        <h2 class="section-title">Bio</h2>
-        <p>Próximamente encontrarás aquí mi historia, influencias musicales y el origen de RODREE como proyecto sonoro.</p>
-    </section>
+        <!-- BIO -->
+        <section id="bio-view" class="view">
+            <h2 class="section-title">Bio</h2>
+            <p>Próximamente encontrarás aquí mi historia, influencias musicales y el origen de RODREE como proyecto sonoro.</p>
+        </section>
 
-    <!-- SETS VIEW -->
-    <section id="sets-view" class="view">
-        <h2 class="section-title">Sets</h2>
-        <p>Próximamente podrás explorar los sets completos, sesiones en vivo y grabaciones exclusivas.</p>
-    </section>
+        <!-- SETS -->
+        <section id="sets-view" class="view">
+            <h2 class="section-title">Sets</h2>
+            <p>Próximamente podrás explorar los sets completos, sesiones en vivo y grabaciones exclusivas.</p>
+        </section>
 
-    <!-- FILOSOFÍA VIEW -->
-    <section id="filosofia-view" class="view">
-        <h2 class="section-title">Filosofía</h2>
-        <p>Próximamente la filosofía detrás de RODREE: rituales nocturnos, conexión con la naturaleza y la curaduría sonora como forma de vida.</p>
-    </section>
+        <!-- FILOSOFÍA -->
+        <section id="filosofia-view" class="view">
+            <h2 class="section-title">Filosofía</h2>
+            <p>Próximamente la filosofía detrás de RODREE: rituales nocturnos, conexión con la naturaleza y la curaduría sonora como forma de vida.</p>
+        </section>
 
-    <!-- CONTACTO VIEW -->
-    <section id="contacto-view" class="view">
-        <h2 class="section-title">Contacto</h2>
-        <div class="contact-container">
-            <p>El formulario de contacto estará disponible pronto. Mientras tanto, podés escribirme a través de Instagram o email.</p>
-        </div>
-    </section>
+        <!-- CONTACTO -->
+        <section id="contacto-view" class="view">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-container">
+                <p>El formulario de contacto estará disponible pronto. Mientras tanto, podés escribirme a través de Instagram o email.</p>
+            </div>
+        </section>
 
-</main>
+    </main>
+
     <div class="hidden-assets">
         <img src="assets/viento.svg" id="anim-viento" style="display:none;">
         <img src="assets/asterisco.svg" id="anim-asterisco" style="display:none;">
@@ -107,6 +109,7 @@
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script>
+        // === SOUND CLOUD PLAYER ===
         const iframe = document.getElementById('sc-widget');
         const widget = SC.Widget(iframe);
         
@@ -115,98 +118,70 @@
         const currentProgress = document.getElementById('current-progress');
         const currentTimeEl = document.getElementById('current-time');
         const totalTimeEl = document.getElementById('total-time');
-        const trackTitleEl = document.getElementById('track-title');
 
-        let isPlaying = false;
         let duration = 0;
 
-        // Formatear tiempo (segundos → mm:ss)
         function formatTime(seconds) {
             const min = Math.floor(seconds / 60);
             const sec = Math.floor(seconds % 60);
             return `${min}:${sec < 10 ? '0' : ''}${sec}`;
         }
 
-        // Click en botón Play/Pause
-        playBtn.addEventListener('click', () => {
-            widget.toggle();
-        });
+        playBtn.addEventListener('click', () => widget.toggle());
 
-        // Cuando el widget está listo
         widget.bind(SC.Widget.Events.READY, () => {
             widget.getDuration((dur) => {
-                duration = dur / 1000; // convertir a segundos
+                duration = dur / 1000;
                 totalTimeEl.textContent = formatTime(duration);
             });
         });
 
-        // Cuando empieza a reproducir
-        widget.bind(SC.Widget.Events.PLAY, () => {
-            isPlaying = true;
-            customPlayer.classList.add('playing');
-        });
+        widget.bind(SC.Widget.Events.PLAY, () => customPlayer.classList.add('playing'));
+        widget.bind(SC.Widget.Events.PAUSE, () => customPlayer.classList.remove('playing'));
 
-        // Cuando se pausa
-        widget.bind(SC.Widget.Events.PAUSE, () => {
-            isPlaying = false;
-            customPlayer.classList.remove('playing');
-        });
-
-        // Actualizar progreso en tiempo real
         widget.bind(SC.Widget.Events.PLAY_PROGRESS, (progress) => {
             const percent = (progress.currentPosition / progress.duration) * 100;
             currentProgress.style.width = percent + '%';
-
-            const currentSec = progress.currentPosition / 1000;
-            currentTimeEl.textContent = formatTime(currentSec);
+            currentTimeEl.textContent = formatTime(progress.currentPosition / 1000);
         });
 
-        // Opcional: Click en la barra para saltar a una posición
-        const progressBar = document.getElementById('progress-bar');
-        progressBar.addEventListener('click', (e) => {
-            const rect = progressBar.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const percentClicked = clickX / rect.width;
-            
-            widget.seekTo(percentClicked * duration * 1000);
+        // === NAVEGACIÓN ===
+        const menuItems = document.querySelectorAll('.icon-item');
+        const views = document.querySelectorAll('.view');
+        const mainHeader = document.getElementById('main-header');
+
+        function switchView(sectionId) {
+            views.forEach(v => v.classList.remove('active'));
+            menuItems.forEach(i => i.classList.remove('active'));
+
+            const target = document.getElementById(sectionId);
+            if (target) target.classList.add('active');
+
+            const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
+            if (activeItem) activeItem.classList.add('active');
+
+            // Mostrar/Ocultar botón "INICIO"
+            if (sectionId === 'home-view') {
+                mainHeader.classList.remove('visible');
+            } else {
+                mainHeader.classList.add('visible');
+            }
+        }
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                switchView(item.getAttribute('data-section'));
+            });
+        });
+
+        document.getElementById('home-logo').addEventListener('click', () => {
+            switchView('home-view');
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.icon-item[data-section="bio-view"]').classList.add('active');
         });
     </script>
-    <script>
-    // Seleccionamos todos los items del menú y las vistas
-    const menuItems = document.querySelectorAll('.icon-item');
-    const views = document.querySelectorAll('.view');
-
-    // Función para cambiar de sección
-    function switchView(sectionId) {
-        // Quitar 'active' de todas las vistas y menú
-        views.forEach(view => view.classList.remove('active'));
-        menuItems.forEach(item => item.classList.remove('active'));
-
-        // Activar la vista seleccionada
-        const targetView = document.getElementById(sectionId);
-        if (targetView) {
-            targetView.classList.add('active');
-        }
-
-        // Activar el ícono del menú
-        const activeMenuItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
-        if (activeMenuItem) {
-            activeMenuItem.classList.add('active');
-        }
-    }
-
-    // Agregar evento click a cada ítem del menú
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const sectionId = item.getAttribute('data-section');
-            switchView(sectionId);
-        });
-    });
-
-    // Opcional: Permitir volver al home haciendo clic en el logo (si querés)
-    document.querySelector('.brand-name').addEventListener('click', () => {
-        switchView('home-view');
-    });
-</script>
 </body>
 </html>

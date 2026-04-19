@@ -263,3 +263,42 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     width: 100%;
     max-width: 500px;
 }
+
+/* ==================== HEADER - BOTÓN INICIO ==================== */
+.main-header {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 30;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.main-header.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#home-logo {
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: 1.45rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;                    /* ← Cursor como enlace */
+    transition: all 0.4s ease;
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+}
+
+#home-logo:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+}
