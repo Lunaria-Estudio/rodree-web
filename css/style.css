@@ -148,7 +148,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     padding: 0 38px;
     display: flex;
     align-items: center;
-    gap: 26px;
+    gap: 30px;
     box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4);
     animation: floating 7.5s ease-in-out infinite;
     transition: opacity 0.6s ease, transform 0.6s ease, all 0.4s ease;
@@ -158,6 +158,13 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     background: rgba(255, 255, 255, 0.035);
     box-shadow: 0 15px 55px rgba(255, 255, 255, 0.1);
     transform: scale(1.015);
+}
+
+/* Contenedores de botones */
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* Botón Play/Pause - Mejorado */
@@ -180,6 +187,21 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     transform: scale(1.12);
     background: rgba(255,255,255,0.15);
     border-color: #fff;
+}
+
+.next-btn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 22px;
+    opacity: 0.6;
+    padding: 8px;
+    transition: all 0.4s var(--transition-luxury);
+}
+
+.next-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
 }
 
 .pause-icon {
@@ -228,6 +250,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     border-radius: 3px;
     position: relative;
     cursor: pointer;
+    transition: height 0.3s var(--transition-luxury), background 0.3s ease;
 }
 
 .current-progress {
@@ -241,8 +264,9 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 }
 
 /* Hover barra */
-.progress-bar:hover .current-progress {
-    background: #ffdd88;
+.progress-bar:hover {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* ==================== ANIMACIONES ==================== */

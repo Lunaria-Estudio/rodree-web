@@ -86,10 +86,13 @@
         </section>
 
         <div class="custom-player" id="custom-player">
-                <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
-                    <span class="play-icon">▶</span>
-                    <span class="pause-icon">❚❚</span>
-                </button>
+                <div class="player-controls">
+                    <button class="play-pause-btn" id="play-btn" aria-label="Play/Pause">
+                        <span class="play-icon">▶</span>
+                        <span class="pause-icon">❚❚</span>
+                    </button>
+                    <button class="next-btn" id="next-btn" aria-label="Siguiente Set">⏭</button>
+                </div>
                 <div class="track-info">
                     <span class="track-title" id="track-title">RODREE | Amanecer Tribal</span>
                     <div class="progress-container">
@@ -124,12 +127,40 @@
         const widget = SC.Widget(iframe);
         
         const playBtn = document.getElementById('play-btn');
+        const nextBtn = document.getElementById('next-btn');
         const customPlayer = document.getElementById('custom-player');
         const currentProgress = document.getElementById('current-progress');
         const currentTimeEl = document.getElementById('current-time');
         const totalTimeEl = document.getElementById('total-time');
+        const trackTitleEl = document.getElementById('track-title');
 
+        let currentTrackIndex = 0;
+        let isPlaying = false;
         let duration = 0;
+
+        const playlist = [
+            { title: "RODREE | Amanecer Tribal", id: "2262729761" },
+            { title: "RODREE | Afro Set VOL1", id: "2068822248" },
+            { title: "RODREE | Afro & Latin House", id: "1720443096" }
+        ];
+
+        function loadTrack(index) {
+            const track = playlist[index];
+            if (!track.id) return; // Evita cargar IDs vacíos
+            
+            currentTrackIndex = index;
+            trackTitleEl.textContent = track.title;
+            
+            const trackUrl = `https://api.soundcloud.com/tracks/${track.id}`;
+            
+            widget.load(trackUrl, {
+                show_user: false,
+                hide_related: true,
+                show_comments: false,
+                show_teaser: false,
+                auto_play: true
+            });
+        }
 
         function formatTime(seconds) {
             const min = Math.floor(seconds / 60);
@@ -137,7 +168,23 @@
             return `${min}:${sec < 10 ? '0' : ''}${sec}`;
         }
 
-        playBtn.addEventListener('click', () => widget.toggle());
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                widget.pause();
+            } else {
+                widget.play();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const nextIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(nextIndex);
+        });
+
+        widget.bind(SC.Widget.Events.FINISH, () => {
+            const nextIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(nextIndex);
+        });
 
         widget.bind(SC.Widget.Events.READY, () => {
             widget.getDuration((dur) => {
@@ -146,13 +193,35 @@
             });
         });
 
-        widget.bind(SC.Widget.Events.PLAY, () => customPlayer.classList.add('playing'));
-        widget.bind(SC.Widget.Events.PAUSE, () => customPlayer.classList.remove('playing'));
+        widget.bind(SC.Widget.Events.PLAY, () => {
+            isPlaying = true;
+            customPlayer.classList.add('playing');
+        });
+
+        widget.bind(SC.Widget.Events.PAUSE, () => {
+            isPlaying = false;
+            customPlayer.classList.remove('playing');
+        });
 
         widget.bind(SC.Widget.Events.PLAY_PROGRESS, (progress) => {
             const percent = (progress.currentPosition / progress.duration) * 100;
             currentProgress.style.width = percent + '%';
             currentTimeEl.textContent = formatTime(progress.currentPosition / 1000);
+        });
+
+        // === SEEKING LOGIC ===
+        const progressBar = document.getElementById('progress-bar');
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const x = e.clientX - rect.left; // Posición horizontal del click
+            const clickedValue = x / rect.width; // Porcentaje del total (0 a 1)
+
+            // Actualización inmediata de la UI para mayor respuesta
+            currentProgress.style.width = (clickedValue * 100) + '%';
+
+            widget.getDuration((durationMs) => {
+                widget.seekTo(durationMs * clickedValue);
+            });
         });
 
         // === NAVEGACIÓN ===
