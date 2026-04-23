@@ -1,0 +1,17 @@
+{
+  "routes": [
+    {
+      "src": "/post/(?<id>[^/]+)",
+      "headers": { "User-Agent": "(?i).*(Twitterbot|WhatsApp|facebookexternalhit|TelegramBot|LinkedInBot|Slackbot|bot|crawler|spider).*" },
+      "dest": "/api/og?id=$id"
+    },
+    {
+      "src": "/post/.*",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
