@@ -174,9 +174,17 @@ export const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
 }, { threshold: 0.05 });
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     renderSets();
-    renderFeed(revealObserver);
+    await renderFeed(revealObserver);
+
+    // Shareable URLs Logic
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('post');
+    if (postId) {
+        window.openPost(postId);
+    }
+
     document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
     document.querySelector('.icon-item[data-section="bio"]')?.classList.add('active');
 });

@@ -77,6 +77,19 @@ export const openPost = async (postId) => {
     likeBtn.querySelector('.like-icon').textContent = isLiked ? '♥' : '♡';
     likeBtn.querySelector('.like-count').textContent = '...';
 
+    // Add/Update Share Button in footer
+    const footer = document.querySelector('.post-full-footer');
+    let shareBtn = document.getElementById('share-post-btn');
+    if (!shareBtn) {
+        shareBtn = document.createElement('button');
+        shareBtn.id = 'share-post-btn';
+        shareBtn.className = 'like-btn'; // Reusing style for minimal aesthetic
+        shareBtn.style.marginLeft = '10px';
+        footer.appendChild(shareBtn);
+    }
+    shareBtn.textContent = 'Share';
+    shareBtn.onclick = (e) => copyShareLink(postId, e.target);
+
     window.switchView('post-view');
 
     const docRef = doc(db, "likes", postId);
@@ -115,3 +128,16 @@ export const handleLike = async (e) => {
         countSpan.textContent = Math.max(0, parseInt(countSpan.textContent) - 1);
     }
 };
+
+// === SHARE LOGIC ===
+export function copyShareLink(postId, btn) {
+    const shareUrl = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = 'Link Copied';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    });
+}
+window.copyShareLink = copyShareLink;
