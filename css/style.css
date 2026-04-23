@@ -72,6 +72,11 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     z-index: 10;
 }
 
+/* Oculto por defecto en escritorio */
+#nav-inicio-mobile {
+    display: none;
+}
+
 .icon-item {
     display: flex;
     flex-direction: column;
@@ -664,39 +669,84 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         transform: none;
+        gap: 0; /* Eliminamos el gap de escritorio para evitar desbordamiento */
         z-index: 1000;
     }
 
+    /* Mostramos el icono de sol en el menú inferior */
+    #nav-inicio-mobile {
+        display: flex;
+        order: 3; /* Posicionado en el centro */
+        transform: translateY(-18px); /* Elevación sutil */
+        z-index: 1001;
+    }
+
+    /* Estilo específico para el botón central de sol */
+    #nav-inicio-mobile img {
+        background: #c8a96e; /* Tono oro/arena cálido */
+        border-radius: 50%;
+        padding: 10px;
+        width: 52px; /* Un poco más grande que los otros */
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        filter: invert(1); /* Mantiene el sol en blanco sobre el fondo tierra */
+    }
+
+    /* Reordenamiento de los items laterales */
+    .icon-item[data-section="bio"] { order: 1; }
+    .icon-item[data-section="sets-view"] { order: 2; }
+    .icon-item[data-section="filosofia-view"] { order: 4; }
+    .icon-item[data-section="contacto-view"] { order: 5; }
+
+    /* Ocultamos el botón de texto "INICIO" del header original */
+    .main-header {
+        display: none !important;
+    }
+
+    /* Desactivar animaciones de deslizamiento en móvil */
+    .icon-item:hover {
+        transform: none !important;
+        opacity: 0.7;
+    }
+
+    /* Feedback de toque simple sin desplazamiento */
+    .icon-item:active {
+        transform: scale(0.95) !important;
+    }
+
     .icon-item { 
-        gap: 6px; 
+        gap: 4px; 
         opacity: 0.7; 
-        min-width: 60px; /* Minimum width for touch targets */
-        padding: 5px;
+        flex: 1; /* Distribución uniforme para que entren los 4 items */
+        padding: 10px 0;
     }
     .icon-item img { width: 38px; }
     .icon-item span { font-size: 0.6rem; letter-spacing: 0.15em; }
 
     /* 2. El nombre RODREE se ajusta al ancho del celu */
     .brand-name {
-        font-size: 3.2rem;
+        font-size: 4.8rem; /* Aumentamos el tamaño para mayor impacto */
         margin-bottom: 10px;
         padding: 0 15px;
+        line-height: 0.9;
     }
 
     .tagline {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         letter-spacing: 0.2em;
         padding: 0 20px;
     }
 
     /* 3. El Reproductor en móvil se achica un poco */
     .custom-player {
-        width: 90vw;
-        height: 125px;
-        padding: 0 25px;
-        bottom: 105px; /* Safe space from bottom menu */
-        gap: 15px;
+        width: 94vw;
+        height: 90px; /* Más compacto y estilizado */
+        padding: 0 20px;
+        bottom: 95px; /* Ajustado para la nueva altura del menú */
+        gap: 12px;
+        border-radius: 40px; /* Forma más orgánica para el tamaño reducido */
     }
+    
+    .player-controls { gap: 8px; }
     
     .track-title { font-size: 0.7rem; }
     .play-pause-btn { 
@@ -704,10 +754,22 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
         height: 48px; 
         background: rgba(255, 255, 255, 0.1); /* Better visibility for touch */
     }
+    .play-pause-btn { width: 42px; height: 42px; font-size: 16px; }
+    .next-btn { font-size: 20px; }
+    .time { font-size: 0.6rem; min-width: 32px; }
     
     .next-btn {
         padding: 12px; /* Increased hit area for Next button */
-        font-size: 24px;
+    }
+
+    /* Ajustes generales de sección para móviles */
+    .view {
+        padding: 80px 20px 140px; /* Más espacio abajo para no tapar contenido con el player */
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 30px;
     }
 
     /* 4. Sets Cards Polish */
