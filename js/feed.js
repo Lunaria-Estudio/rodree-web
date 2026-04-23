@@ -131,7 +131,7 @@ export const handleLike = async (e) => {
 
 // === SHARE LOGIC ===
 export function copyShareLink(postId, btn) {
-    const shareUrl = `${window.location.origin}${window.location.pathname}?post=${postId}`;
+    const shareUrl = `${window.location.origin}/post/${postId}`;
     navigator.clipboard.writeText(shareUrl).then(() => {
         const originalText = btn.textContent;
         btn.textContent = 'Link Copied';

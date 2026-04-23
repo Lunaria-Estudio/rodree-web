@@ -180,7 +180,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Shareable URLs Logic
     const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('post');
+    let postId = urlParams.get('post');
+
+    // Check for path-based ID (/post/ID) if query param is missing
+    if (!postId && window.location.pathname.startsWith('/post/')) {
+        postId = window.location.pathname.split('/post/')[1];
+    }
+
     if (postId) {
         window.openPost(postId);
     }
