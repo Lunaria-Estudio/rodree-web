@@ -24,6 +24,7 @@
         #preview { max-width: 200px; margin-top: 10px; display: none; border-radius: 4px; }
         .post-list { list-style: none; padding: 0; }
         .post-item { background: #111; border: 1px solid #222; padding: 20px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-edit { background: #4a90e2; color: #fff; padding: 6px 15px; font-size: 0.8rem; border-radius: 4px; border: none; cursor: pointer; margin-right: 10px; }
         .post-info h3 { margin: 0 0 5px; font-size: 1.1rem; }
         .post-info span { font-size: 0.8rem; color: #666; }
         .btn-delete { background: #ff4444; color: #fff; padding: 6px 15px; font-size: 0.8rem; border-radius: 4px; border: none; cursor: pointer; }
@@ -92,7 +93,7 @@
                 <div class="field"><label>Cuerpo del Post (Acepta HTML)</label><textarea id="body" rows="8" required></textarea></div>
                 <div class="field">
                     <label>Imagen</label>
-                    <input type="file" id="imageInput" accept="image/*" required>
+                    <input type="file" id="imageInput" accept="image/*">
                     <img id="preview" src="" alt="Vista previa">
                 </div>
                 <button type="submit" id="submitBtn">Publicar</button>
@@ -115,6 +116,8 @@
             orderBy, 
             query, 
             doc,
+            updateDoc,
+            getDoc,
             signInWithEmailAndPassword,
             signOut,
             onAuthStateChanged 
@@ -123,6 +126,7 @@
         const loginScreen = document.getElementById('login-screen');
         const adminPanel  = document.getElementById('admin-panel');
         const loginError  = document.getElementById('login-error');
+        let editingPostId = null;
 
         // ── AUTH STATE LISTENER ──
         // Este es el guardián: si hay sesión activa muestra el panel, si no muestra el login
@@ -203,11 +207,35 @@
                         <h3>${post.title}</h3>
                         <span>${post.date}</span>
                     </div>
-                    <button class="btn-delete" data-id="${docSnap.id}">Eliminar</button>
+                    <div>
+                        <button class="btn-edit" data-id="${docSnap.id}">Editar</button>
+                        <button class="btn-delete" data-id="${docSnap.id}">Eliminar</button>
+                    </div>
                 `;
                 postList.appendChild(li);
             });
         }
+
+        // ── EDITAR POST ──
+        window.editPost = async (id) => {
+            editingPostId = id;
+            const docSnap = await getDoc(doc(db, "posts", id));
+            if (docSnap.exists()) {
+                const post = docSnap.data();
+                document.getElementById('title').value     = post.title;
+                document.getElementById('date').value      = post.date;
+                document.getElementById('shortText').value = post.shortText;
+                document.getElementById('body').value      = post.body;
+                
+                // Mostrar la imagen actual en el preview
+                preview.src = post.imageUrl;
+                preview.style.display = 'block';
+                
+                document.getElementById('submitBtn').textContent = 'Actualizar Post';
+                // Scroll suave hacia arriba
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        };
 
         // ── ELIMINAR POST ──
         document.getElementById('postList').addEventListener('click', async (e) => {
@@ -217,6 +245,8 @@
                     await deleteDoc(doc(db, "posts", id));
                     loadPosts();
                 }
+            } else if (e.target.classList.contains('btn-edit')) {
+                window.editPost(e.target.getAttribute('data-id'));
             }
         });
 
@@ -230,20 +260,43 @@
             status.style.display  = 'none';
 
             try {
-                const imageUrl = await uploadToCloudinary(imageInput.files[0]);
-                await addDoc(collection(db, "posts"), {
+                let imageUrl = "";
+                const file = imageInput.files[0];
+
+                if (file) {
+                    imageUrl = await uploadToCloudinary(file);
+                } else if (editingPostId) {
+                    // Si estamos editando y no hay archivo nuevo, recuperamos la URL anterior
+                    const docSnap = await getDoc(doc(db, "posts", editingPostId));
+                    imageUrl = docSnap.data().imageUrl;
+                } else {
+                    throw new Error("La imagen es obligatoria para nuevos posts.");
+                }
+
+                const postData = {
                     title:     document.getElementById('title').value,
                     date:      document.getElementById('date').value,
                     shortText: document.getElementById('shortText').value,
                     body:      document.getElementById('body').value,
-                    imageUrl,
-                    createdAt: new Date()
-                });
-                status.textContent    = '✓ Post publicado con éxito';
+                    imageUrl
+                };
+
+                if (editingPostId) {
+                    postData.updatedAt = new Date();
+                    await updateDoc(doc(db, "posts", editingPostId), postData);
+                    status.textContent = '✓ Post actualizado con éxito';
+                } else {
+                    postData.createdAt = new Date();
+                    await addDoc(collection(db, "posts"), postData);
+                    status.textContent = '✓ Post publicado con éxito';
+                }
+
                 status.className      = 'success';
                 status.style.display  = 'block';
                 e.target.reset();
                 preview.style.display = 'none';
+                editingPostId = null;
+                submitBtn.textContent = 'Publicar';
                 loadPosts();
             } catch (err) {
                 console.error(err);
