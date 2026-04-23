@@ -105,15 +105,20 @@
     </div>
 
     <script type="module">
-        import { db, collection, addDoc, getDocs, deleteDoc, orderBy, query, doc } from './js/firebase.js';
-        import {
-            getAuth,
+        import { 
+            db, 
+            auth, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            deleteDoc, 
+            orderBy, 
+            query, 
+            doc,
             signInWithEmailAndPassword,
             signOut,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
-
-        const auth = getAuth();
+            onAuthStateChanged 
+        } from './js/firebase.js';
 
         const loginScreen = document.getElementById('login-screen');
         const adminPanel  = document.getElementById('admin-panel');
