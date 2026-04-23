@@ -20,6 +20,7 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
+    line-height: 1.6;
     font-weight: 300;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
@@ -27,7 +28,7 @@ body {
 }
 
 /* Cursor en elementos interactivos */
-a, button, .icon-item, .play-pause-btn, .progress-bar {
+a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     cursor: url('../assets/cursor_palmera_original.png'), pointer !important;
 }
 
@@ -675,6 +676,38 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
 
 .feed-footer {
     padding: 0 24px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-like-preview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+}
+
+.card-like-icon {
+    opacity: 0.4;
+    transition: color 0.3s ease, opacity 0.3s ease;
+}
+
+.card-like-icon.active {
+    color: #c8a96e;
+    opacity: 1;
+}
+
+.card-like-count {
+    opacity: 0.5;
+    font-size: 0.75rem;
+}
+
+.read-more {
+    font-size: 0.7rem;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 .like-btn {
@@ -686,6 +719,74 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     font-size: 0.85rem;
     transition: all 0.3s ease;
     cursor: pointer;
+}
+
+/* ==================== POST VIEW (FULL BLOG) ==================== */
+.post-full {
+    max-width: 680px;
+    width: 90%;
+    margin: 40px auto 100px;
+    text-align: left;
+    animation: viewEntrance 0.8s var(--transition-luxury) forwards;
+}
+
+#back-to-feed {
+    align-self: flex-start;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 30px;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+}
+
+#back-to-feed:hover {
+    color: var(--text-main);
+}
+
+.post-full-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 24px;
+    margin-bottom: 30px;
+    border: 1px solid var(--glass-border);
+}
+
+.post-full-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    margin-bottom: 10px;
+}
+
+.post-full-title {
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    margin-bottom: 30px;
+    color: var(--text-main);
+}
+
+.post-full-body {
+    color: var(--warm-off-white);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-weight: 300;
+}
+
+.post-full-body p {
+    margin-bottom: 25px;
+}
+
+.post-full-footer {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid var(--glass-border);
 }
 
 .like-btn.active {

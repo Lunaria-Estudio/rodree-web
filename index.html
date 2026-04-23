@@ -86,39 +86,25 @@
         <!-- FEED -->
         <section id="feed-view" class="view">
             <h2 class="section-title">Feed</h2>
-            <div class="feed-container">
-                <!-- Post 1 -->
-                <div class="feed-card reveal-on-scroll">
-                    <div class="feed-date">Abril 2025</div>
-                    <div class="feed-image">
-                        <img src="https://picsum.photos/seed/rodree1/800/600" alt="Ritual">
-                    </div>
-                    <div class="feed-text">La luz se funde con el pulso de la tierra. Un ritual de sonido que nace en el silencio de la arena y muere en el baile.</div>
-                    <div class="feed-footer">
-                        <button class="like-btn" data-id="post-1">♡ <span class="like-count">0</span></button>
-                    </div>
+            <div class="feed-container" id="feed-container">
+                <!-- Contenido generado por JS -->
+            </div>
+        </section>
+
+        <!-- POST FULL VIEW -->
+        <section id="post-view" class="view">
+            <button id="back-to-feed">← Volver al feed</button>
+            <div class="post-full" id="post-content">
+                <img src="" alt="" class="post-full-image" id="p-image">
+                <div class="post-full-date" id="p-date"></div>
+                <h2 class="post-full-title" id="p-title"></h2>
+                <div class="post-full-body" id="p-body">
+                    <!-- Texto largo aquí -->
                 </div>
-                <!-- Post 2 -->
-                <div class="feed-card reveal-on-scroll">
-                    <div class="feed-date">Marzo 2025</div>
-                    <div class="feed-image">
-                        <img src="https://picsum.photos/seed/rodree2/800/600" alt="Naturaleza">
-                    </div>
-                    <div class="feed-text">Cazando amaneceres entre cables y sintetizadores. La naturaleza siempre dicta el tempo de nuestra noche.</div>
-                    <div class="feed-footer">
-                        <button class="like-btn" data-id="post-2">♡ <span class="like-count">0</span></button>
-                    </div>
-                </div>
-                <!-- Post 3 -->
-                <div class="feed-card reveal-on-scroll">
-                    <div class="feed-date">Febrero 2025</div>
-                    <div class="feed-image">
-                        <img src="https://picsum.photos/seed/rodree3/800/600" alt="Curaduría">
-                    </div>
-                    <div class="feed-text">Texturas que viajan del mar a la pista. El eco de una tribu digital que baila bajo las estrellas de la costa.</div>
-                    <div class="feed-footer">
-                        <button class="like-btn" data-id="post-3">♡ <span class="like-count">0</span></button>
-                    </div>
+                <div class="post-full-footer">
+                    <button class="like-btn" id="main-like-btn" data-id="">
+                        <span class="like-icon">♡</span> <span class="like-count">0</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -175,10 +161,54 @@
     </div>
 
     <script src="https://w.soundcloud.com/player/api.js"></script>
-    <script>
+    <script type="module">
+        // === FIREBASE CONFIGURATION ===
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxC2MZLWWZkw12Bs1UO5B9bOf4KTT4yKo",
+            authDomain: "rodree-b84d0.firebaseapp.com",
+            projectId: "rodree-b84d0",
+            storageBucket: "rodree-b84d0.firebasestorage.app",
+            messagingSenderId: "584298469864",
+            appId: "1:584298469864:web:3cafdf792cfa846cc96c5d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // === FEED DATA ===
+        const feedPosts = [
+            {
+                id: "post-1",
+                date: "Abril 2025",
+                image: "https://picsum.photos/seed/rodree1/800/600",
+                title: "Rituales de Arena",
+                shortText: "La luz se funde con el pulso de la tierra. Un ritual de sonido que nace en el silencio.",
+                text: "<p>La luz se funde con el pulso de la tierra. Un ritual de sonido que nace en el silencio de la arena y muere en el baile colectivo bajo la luna menguante.</p><p>Sentir la vibración de las frecuencias bajas mezclándose con el romper de las olas no es solo música, es una reconexión con lo primario. En este set, busqué capturar esa transición entre la calma absoluta y la euforia orgánica.</p><p>Cada track fue seleccionado para honrar el espacio que habitamos. No hay pistas de baile, solo territorios que conquistamos con el movimiento.</p>"
+            },
+            {
+                id: "post-2",
+                date: "Marzo 2025",
+                image: "https://picsum.photos/seed/rodree2/800/600",
+                title: "Cazadores de Amaneceres",
+                shortText: "Cazando amaneceres entre cables y sintetizadores. La naturaleza dicta nuestro tempo.",
+                text: "<p>Cazando amaneceres entre cables y sintetizadores. La naturaleza siempre dicta el tempo de nuestra noche, marcando el final de un ciclo y el inicio de otro.</p><p>Cuando el primer rayo de sol toca la controladora, el sonido cambia. Se vuelve más etéreo, más ligero, acompañando el despertar del mundo mientras nosotros nos negamos a dormir.</p><p>La curaduría en estos momentos es crítica: es el puente entre la oscuridad profunda del club y la claridad infinita del horizonte costero.</p>"
+            },
+            {
+                id: "post-3",
+                date: "Febrero 2025",
+                image: "https://picsum.photos/seed/rodree3/800/600",
+                title: "Tribu Digital",
+                shortText: "Texturas que viajan del mar a la pista. El eco de una tribu que baila bajo las estrellas.",
+                text: "<p>Texturas que viajan del mar a la pista. El eco de una tribu digital que baila bajo las estrellas de la costa, unida por un mismo pulso invisible.</p><p>La tecnología nos permite crear estos oasis sonoros en cualquier rincón del mundo. Somos nómadas armados con ritmos afro-house y texturas orgánicas que desafían el paso del tiempo.</p><p>Gracias a todos los que formaron parte de esta ceremonia. La música es el lenguaje, pero el baile es la respuesta.</p>"
+            }
+        ];
+
         // === SOUND CLOUD PLAYER ===
         const iframe = document.getElementById('sc-widget');
-        const widget = SC.Widget(iframe);
+        const widget = window.SC.Widget(iframe);
         
         const playBtn = document.getElementById('play-btn');
         const nextBtn = document.getElementById('next-btn');
@@ -315,56 +345,165 @@
         const views = document.querySelectorAll('.view');
         const mainHeader = document.getElementById('main-header');
 
-        function switchView(sectionId) {
-    views.forEach(v => v.classList.remove('active'));
-    menuItems.forEach(i => i.classList.remove('active'));
+        window.switchView = function(sectionId) {
+            views.forEach(v => v.classList.remove('active'));
+            menuItems.forEach(i => i.classList.remove('active'));
 
-    const target = document.getElementById(sectionId);
-    if (target) target.classList.add('active');
+            const target = document.getElementById(sectionId);
+            if (target) target.classList.add('active');
 
-    const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
-    if (activeItem) activeItem.classList.add('active');
+            const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
+            if (activeItem) activeItem.classList.add('active');
 
-    // --- CONTROL DE VISIBILIDAD DEL REPRODUCTOR ---
-    const player = document.getElementById('custom-player');
-    if (sectionId === 'home-view') {
-        mainHeader.classList.remove('visible');
-        player.style.opacity = "1";
-        player.style.pointerEvents = "auto";
-    } else {
-        mainHeader.classList.add('visible');
-        player.style.opacity = "0";          /* Se vuelve invisible */
-        player.style.pointerEvents = "none";   /* No se puede clickear si no se ve */
-    }
-}
+            const player = document.getElementById('custom-player');
+            if (sectionId === 'home-view') {
+                mainHeader.classList.remove('visible');
+                player.style.opacity = "1";
+                player.style.pointerEvents = "auto";
+            } else {
+                mainHeader.classList.add('visible');
+                player.style.opacity = "0";
+                player.style.pointerEvents = "none";
+            }
+            // Auto-scroll to top when switching
+            document.querySelector('.content').scrollTop = 0;
+        };
+
+        // === FEED & POST LOGIC ===
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            container.innerHTML = feedPosts.map(post => {
+                const isLiked = localStorage.getItem(`liked-${post.id}`) === 'true';
+                return `
+                <div class="feed-card reveal-on-scroll" onclick="openPost('${post.id}')">
+                    <div class="feed-date">${post.date}</div>
+                    <div class="feed-image">
+                        <img src="${post.image}" alt="${post.title}">
+                    </div>
+                    <div class="feed-text">
+                        <strong>${post.title}</strong><br>
+                        ${post.shortText}
+                    </div>
+                    <div class="feed-footer">
+                        <div class="card-like-preview" id="card-like-${post.id}">
+                            <span class="card-like-icon ${isLiked ? 'active' : ''}">${isLiked ? '♥' : '♡'}</span>
+                            <span class="card-like-count">...</span>
+                        </div>
+                        <span class="read-more">Leer más →</span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            document.querySelectorAll('.feed-card').forEach(el => revealObserver.observe(el));
+            loadFeedLikeCounts();
+        }
+
+        async function loadFeedLikeCounts() {
+            for (const post of feedPosts) {
+                const docRef = doc(db, "likes", post.id);
+                const docSnap = await getDoc(docRef);
+                const countEl = document.querySelector(`#card-like-${post.id} .card-like-count`);
+                if (countEl) {
+                    countEl.textContent = docSnap.exists() ? docSnap.data().count : '0';
+                }
+            }
+        }
+
+        window.openPost = async (postId) => {
+            const post = feedPosts.find(p => p.id === postId);
+            if (!post) return;
+
+            // Populate view
+            document.getElementById('p-image').src = post.image;
+            document.getElementById('p-date').textContent = post.date;
+            document.getElementById('p-title').textContent = post.title;
+            document.getElementById('p-body').innerHTML = post.text;
+            
+            const likeBtn = document.getElementById('main-like-btn');
+            likeBtn.setAttribute('data-id', postId);
+            
+            // Initial UI state for likes
+            const isLiked = localStorage.getItem(`liked-${postId}`) === 'true';
+            likeBtn.classList.toggle('active', isLiked);
+            likeBtn.querySelector('.like-icon').textContent = isLiked ? '♥' : '♡';
+            likeBtn.querySelector('.like-count').textContent = '...';
+
+            window.switchView('post-view');
+
+            // Fetch real count from Firestore
+            const docRef = doc(db, "likes", postId);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                likeBtn.querySelector('.like-count').textContent = docSnap.data().count;
+            } else {
+                await setDoc(docRef, { count: 0 });
+                likeBtn.querySelector('.like-count').textContent = '0';
+            }
+        };
+
+        // === LIKES PERSISTENCE ===
+        const handleLike = async (e) => {
+            e.stopPropagation(); // BUG 1 FIX: Evita navegación accidental al clickear el like
+            const btn = e.currentTarget;
+            const postId = btn.getAttribute('data-id');
+            const countSpan = btn.querySelector('.like-count');
+            const iconSpan = btn.querySelector('.like-icon');
+            const isLiked = localStorage.getItem(`liked-${postId}`) === 'true';
+            
+            const docRef = doc(db, "likes", postId);
+            
+            if (!isLiked) {
+                // Like
+                await updateDoc(docRef, { count: increment(1) });
+                localStorage.setItem(`liked-${postId}`, 'true');
+                btn.classList.add('active');
+                iconSpan.textContent = '♥';
+                countSpan.textContent = parseInt(countSpan.textContent) + 1;
+            } else {
+                // Unlike
+                await updateDoc(docRef, { count: increment(-1) });
+                localStorage.removeItem(`liked-${postId}`);
+                btn.classList.remove('active');
+                iconSpan.textContent = '♡';
+                countSpan.textContent = Math.max(0, parseInt(countSpan.textContent) - 1);
+            }
+        };
+
+        document.getElementById('main-like-btn').addEventListener('click', handleLike);
+        document.getElementById('back-to-feed').addEventListener('click', () => window.switchView('feed-view'));
 
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
-                switchView(item.getAttribute('data-section'));
+                window.switchView(item.getAttribute('data-section'));
             });
         });
 
         document.getElementById('home-logo').addEventListener('click', () => {
-            switchView('home-view');
+            window.switchView('home-view');
         });
 
-        // === REVEAL ON SCROLL (Intersection Observer) ===
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.05 });
 
-        // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
-            renderSets();
+            window.renderSets();
+            renderFeed();
             document.querySelectorAll('.reveal-on-scroll').forEach(el => {
                 revealObserver.observe(el);
             });
             document.querySelector('.icon-item[data-section="bio"]').classList.add('active');
         });
+
+        // Expose necessary functions to window for HTML event handlers
+        window.loadTrack = loadTrack;
+        window.renderSets = renderSets;
     </script>
 </body>
 </html>
