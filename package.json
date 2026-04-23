@@ -2,6 +2,6 @@
   "name": "rodree-web",
   "version": "1.0.0",
   "dependencies": {
-    "firebase-admin": "^12.12.1"
+    "firebase-admin": "^12.3.0"
   }
 }
