@@ -629,6 +629,71 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     align-self: flex-start;
 }
 
+/* ==================== FEED SECTION ==================== */
+.feed-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.feed-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    overflow: hidden;
+    text-align: left;
+    transition: transform 0.4s var(--transition-luxury);
+    backdrop-filter: blur(10px);
+}
+
+.feed-date {
+    padding: 24px 24px 12px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.feed-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.feed-text {
+    padding: 24px;
+    color: var(--warm-off-white);
+    line-height: 1.7;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.feed-footer {
+    padding: 0 24px 24px;
+}
+
+.like-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.like-btn.active {
+    color: #c8a96e;
+    border-color: #c8a96e;
+    background: rgba(200, 169, 110, 0.05);
+}
+
 .set-listen-btn:hover {
     background: var(--text-main);
     color: #000;
@@ -694,7 +759,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar {
     /* Reordenamiento de los items laterales */
     .icon-item[data-section="bio"] { order: 1; }
     .icon-item[data-section="sets-view"] { order: 2; }
-    .icon-item[data-section="filosofia-view"] { order: 4; }
+    .icon-item[data-section="feed-view"] { order: 4; }
     .icon-item[data-section="contacto-view"] { order: 5; }
 
     /* Ocultamos el botón de texto "INICIO" del header original */
