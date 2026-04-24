@@ -849,6 +849,55 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     text-transform: uppercase;
 }
 
+/* ==================== NEWSLETTER ==================== */
+.newsletter-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.newsletter-form {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#sub-email {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    padding: 14px 18px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+#sub-email:focus { outline: none; background: rgba(255, 255, 255, 0.04); }
+
+#sub-btn {
+    background: var(--glass-bg);
+    border: none;
+    border-left: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0 25px;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.4s var(--transition-luxury);
+}
+
+#sub-btn:hover:not(:disabled) { background: var(--text-main); color: #000; }
+#sub-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+#sub-message { font-size: 0.7rem; letter-spacing: 0.05em; min-height: 1.2em; transition: opacity 0.3s ease; }
+#sub-message.hidden { opacity: 0; }
+
 .set-listen-btn:hover {
     background: var(--text-main);
     color: #000;
