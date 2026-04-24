@@ -1,6 +1,7 @@
 {
   "name": "rodree-web",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "firebase-admin": "^12.3.0"
   }
