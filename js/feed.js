@@ -30,9 +30,34 @@ export async function loadFeedLikeCounts() {
 }
 
 export async function renderFeed(revealObserver) {
-    livePosts = await loadPostsFromFirestore();
     const container = document.getElementById('feed-container');
     if (!container) return;
+
+    // PART 1: Loading State (Skeletons)
+    const skeletonHTML = `
+        <div class="skeleton-card">
+            <div class="skeleton-line" style="width: 20%; margin: 24px 24px 12px;"></div>
+            <div class="skeleton-image"></div>
+            <div class="skeleton-line" style="width: 70%; margin-top: 24px;"></div>
+            <div class="skeleton-line" style="width: 100%;"></div>
+            <div class="skeleton-line" style="width: 90%; margin-bottom: 24px;"></div>
+        </div>
+    `;
+    container.innerHTML = skeletonHTML.repeat(3);
+
+    livePosts = await loadPostsFromFirestore();
+
+    // PART 2: Empty State
+    if (livePosts.length === 0) {
+        container.innerHTML = `
+            <div class="feed-empty-state">
+                <h3>Nada por acá todavía.</h3>
+                <p>El próximo ritual se está preparando.</p>
+            </div>
+        `;
+        return;
+    }
+
     container.innerHTML = livePosts.map(post => {
         const isLiked = localStorage.getItem(`liked-${post.id}`) === 'true';
         return `

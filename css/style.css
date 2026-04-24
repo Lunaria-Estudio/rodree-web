@@ -795,6 +795,60 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     background: rgba(200, 169, 110, 0.05);
 }
 
+/* ==================== LOADING & EMPTY STATES ==================== */
+
+/* Skeletons */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.skeleton-image, .skeleton-line {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+}
+
+.skeleton-line {
+    height: 12px;
+    margin: 12px 24px;
+    border-radius: 4px;
+}
+
+/* Empty State */
+.feed-empty-state {
+    text-align: center;
+    width: 100%;
+    padding: 60px 0;
+}
+
+.feed-empty-state h3 {
+    font-family: 'Bowlby One SC', system-ui;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    margin-bottom: 8px;
+    color: var(--text-main);
+}
+
+.feed-empty-state p {
+    font-size: 0.8rem;
+    opacity: 0.35;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
 .set-listen-btn:hover {
     background: var(--text-main);
     color: #000;
