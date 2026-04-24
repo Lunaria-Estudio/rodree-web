@@ -1,17 +1,23 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/post/(?<id>[^/]+)",
-      "headers": { "User-Agent": "(?i).*(Twitterbot|WhatsApp|facebookexternalhit|TelegramBot|LinkedInBot|Slackbot|bot|crawler|spider).*" },
-      "dest": "/api/og?id=$id"
+      "source": "/post/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(Twitterbot|WhatsApp|facebookexternalhit|TelegramBot|LinkedInBot|Slackbot|bot|crawler|spider).*"
+        }
+      ],
+      "destination": "/api/og?id=:id"
     },
     {
-      "src": "/post/.*",
-      "dest": "/index.html"
+      "source": "/post/:id",
+      "destination": "/index.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
