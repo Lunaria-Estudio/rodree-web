@@ -1,5 +1,11 @@
 import { db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, orderBy, query } from './firebase.js';
 
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { 
+        if (entry.isIntersecting) entry.target.classList.add('is-visible'); 
+    });
+}, { threshold: 0.05 });
+
 let livePosts = [];
 
 export async function loadPostsFromFirestore() {
@@ -29,7 +35,7 @@ export async function loadFeedLikeCounts() {
     }
 }
 
-export async function renderFeed(revealObserver) {
+export async function renderFeed() {
     const container = document.getElementById('feed-container');
     if (!container) return;
 
@@ -45,6 +51,7 @@ export async function renderFeed(revealObserver) {
     `;
     container.innerHTML = skeletonHTML.repeat(3);
 
+    
     livePosts = await loadPostsFromFirestore();
 
     // PART 2: Empty State
@@ -61,7 +68,7 @@ export async function renderFeed(revealObserver) {
     container.innerHTML = livePosts.map(post => {
         const isLiked = localStorage.getItem(`liked-${post.id}`) === 'true';
         return `
-            <div class="feed-card reveal-on-scroll" onclick="openPost('${post.id}')">
+            <div class="feed-card reveal-on-scroll" data-post-id="${post.id}">
                 <div class="feed-date">${post.date}</div>
                 <div class="feed-image">
                     <img src="${post.image}" alt="${post.title}">
@@ -80,9 +87,20 @@ export async function renderFeed(revealObserver) {
             </div>
         `;
     }).join('');
+
+    container.querySelectorAll('.feed-card').forEach(card => {
+    card.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('open-post', { 
+            detail: { postId: card.dataset.postId } 
+        }));
+    });
+});
+
+document.querySelectorAll('.feed-card').forEach(el => revealObserver.observe(el));
+
+
+loadFeedLikeCounts();
     
-    document.querySelectorAll('.feed-card').forEach(el => revealObserver.observe(el));
-    loadFeedLikeCounts();
 }
 
 export const openPost = async (postId) => {
@@ -115,7 +133,7 @@ export const openPost = async (postId) => {
     shareBtn.textContent = 'Share';
     shareBtn.onclick = (e) => copyShareLink(postId, e.target);
 
-    window.switchView('post-view');
+    document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'post-view' } }));
 
     const docRef = doc(db, "likes", postId);
     const docSnap = await getDoc(docRef);
@@ -127,7 +145,7 @@ export const openPost = async (postId) => {
         likeBtn.querySelector('.like-count').textContent = '0';
     }
 };
-window.openPost = openPost;
+
 
 export const handleLike = async (e) => {
     e.stopPropagation();
@@ -165,4 +183,3 @@ export function copyShareLink(postId, btn) {
         }, 2000);
     });
 }
-window.copyShareLink = copyShareLink;

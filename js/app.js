@@ -1,4 +1,10 @@
-import { renderFeed, handleLike } from './feed.js';
+import { renderFeed, handleLike, openPost } from './feed.js';
+
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { 
+        if (entry.isIntersecting) entry.target.classList.add('is-visible'); 
+    });
+}, { threshold: 0.05 });
 
 // === SOUND CLOUD PLAYER ===
 const iframe = document.getElementById('sc-widget');
@@ -40,7 +46,6 @@ export function loadTrack(index) {
         auto_play: true
     });
 }
-window.loadTrack = loadTrack;
 
 export function renderSets() {
     const grid = document.getElementById('sets-grid');
@@ -71,7 +76,6 @@ export function renderSets() {
         });
     }
 }
-window.renderSets = renderSets;
 
 function formatTime(seconds) {
     const min = Math.floor(seconds / 60);
@@ -89,12 +93,12 @@ playBtn.addEventListener('click', () => {
 
 nextBtn.addEventListener('click', () => {
     const nextIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(nextIndex);
+    document.dispatchEvent(new CustomEvent('load-track', { detail: { index: nextIndex } }));
 });
 
 widget.bind(window.SC.Widget.Events.FINISH, () => {
     const nextIndex = (currentTrackIndex + 1) % playlist.length;
-    loadTrack(nextIndex);
+    document.dispatchEvent(new CustomEvent('load-track', { detail: { index: nextIndex } }));
 });
 
 widget.bind(window.SC.Widget.Events.READY, () => {
@@ -138,7 +142,7 @@ const menuItems = document.querySelectorAll('.icon-item');
 const views = document.querySelectorAll('.view');
 const mainHeader = document.getElementById('main-header');
 
-window.switchView = function(sectionId) {
+function switchView(sectionId) {
     views.forEach(v => v.classList.remove('active'));
     menuItems.forEach(i => i.classList.remove('active'));
 
@@ -163,12 +167,23 @@ window.switchView = function(sectionId) {
         }
     }
     document.querySelector('.content').scrollTop = 0;
-};
+}
 
 document.getElementById('main-like-btn')?.addEventListener('click', handleLike);
-document.getElementById('back-to-feed')?.addEventListener('click', () => window.switchView('feed-view'));
-menuItems.forEach(item => item.addEventListener('click', () => window.switchView(item.getAttribute('data-section'))));
-document.getElementById('home-logo')?.addEventListener('click', () => window.switchView('home-view'));
+document.getElementById('back-to-feed')?.addEventListener('click', () => document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'feed-view' } })));
+menuItems.forEach(item => item.addEventListener('click', () => document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: item.getAttribute('data-section') } }))));
+document.getElementById('home-logo')?.addEventListener('click', () => document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'home-view' } })));
+
+// === BRIDGE DE EVENTOS (Reemplaza a window.X) ===
+document.addEventListener('load-track', (e) => loadTrack(e.detail.index));
+document.addEventListener('render-sets', () => renderSets());
+document.addEventListener('switch-view', (e) => switchView(e.detail.sectionId));
+document.addEventListener('open-post', (e) => openPost(e.detail.postId));
+
+// Inicializar el observador para elementos que aparecen al hacer scroll
+const initScrollReveal = () => {
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
+};
 
 const newsletterForm = document.getElementById('newsletter-form');
 if (newsletterForm) {
@@ -209,27 +224,28 @@ if (newsletterForm) {
     });
 }
 
-export const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('is-visible'); });
-}, { threshold: 0.05 });
-
 document.addEventListener('DOMContentLoaded', async () => {
-    renderSets();
-    await renderFeed(revealObserver);
+    // 1. Primero disparamos la navegación para que la UI responda instantáneamente
+    document.querySelector('.icon-item[data-section="bio"]')?.classList.add('active');
+    document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'bio' } }));
+    
+    // 2. Activamos el observador de scroll para los elementos de la Bio y otras secciones
+    initScrollReveal();
 
-    // Shareable URLs Logic
+    // 3. Cargamos el resto de los componentes
+    document.dispatchEvent(new CustomEvent('render-sets'));
+
     const urlParams = new URLSearchParams(window.location.search);
     let postId = urlParams.get('post');
 
-    // Check for path-based ID (/post/ID) if query param is missing
     if (!postId && window.location.pathname.startsWith('/post/')) {
         postId = window.location.pathname.split('/post/')[1];
     }
 
     if (postId) {
-        window.openPost(postId);
+        document.dispatchEvent(new CustomEvent('open-post', { detail: { postId } }));
     }
 
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => revealObserver.observe(el));
-    document.querySelector('.icon-item[data-section="bio"]')?.classList.add('active');
+    // 4. El feed se carga al final por ser asíncrono y pesado
+    await renderFeed();
 });
