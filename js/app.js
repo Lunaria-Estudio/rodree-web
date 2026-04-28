@@ -1,5 +1,6 @@
 import { renderFeed, handleLike, openPost } from './feed.js';
 import { loadTrack, renderSets } from './components/player.js';
+import { activateZenMode, deactivateZenMode } from './components/zenMode.js';
 
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => { 
@@ -95,6 +96,25 @@ if (newsletterForm) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // --- ZEN MODE INITIALIZATION ---
+    const IDLE_TIME = 5 * 1000; // 5 segundos para testear// 5 minutos para producción
+    let idleTimer;
+
+    const resetIdleTimer = () => {
+        deactivateZenMode();
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(activateZenMode, IDLE_TIME);
+    };
+
+    ['click', 'keydown', 'touchstart'].forEach(evt => {
+    window.addEventListener(evt, resetIdleTimer);
+});
+
+window.addEventListener('mousemove', () => {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(activateZenMode, IDLE_TIME);
+});
+
     // 1. Primero disparamos la navegación para que la UI responda instantáneamente
     document.querySelector('.icon-item[data-section="bio"]')?.classList.add('active');
     document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'bio' } }));

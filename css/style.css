@@ -1063,4 +1063,42 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
         max-width: 400px;
         margin: 0 auto;
     }
+
+    }
+
+/* === ZEN MODE SCREENSAVER === */
+body.zen-phase-2 .side-menu,
+body.zen-phase-2 .main-header {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    filter: blur(8px);
+    pointer-events: none;
+    transition: opacity 2s ease-in-out, visibility 2s, filter 2s ease-in-out;
+}
+
+body.zen-phase-3 .brand-name,
+body.zen-phase-3 .tagline {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    filter: blur(12px);
+    pointer-events: none;
+    transition: opacity 2s ease-in-out, visibility 2s, filter 2s ease-in-out;
+}
+
+.zen-active #custom-player {
+    position: fixed !important;
+    z-index: 9999;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    transition: none !important;
+}
+
+.side-menu,
+.main-header,
+.brand-name,
+.tagline {
+    transition: opacity 2s ease-in-out, 
+                visibility 2s ease-in-out, 
+                filter 2s ease-in-out;
 }
