@@ -63,7 +63,7 @@ export function renderSets() {
                 <h3 class="set-title">${set.title}</h3>
                 ${isYT ? 
                     `<a href="https://youtu.be/${set.id}" target="_blank" rel="noopener noreferrer" class="set-listen-btn" id="yt-set-link">Ver Video</a>` :
-                    `<button class="set-listen-btn" onclick="loadTrack(${index})">Escuchar</button>`
+                    `<button class="set-listen-btn" onclick="document.dispatchEvent(new CustomEvent('load-track', { detail: { index: ${index} } }))">Escuchar</button>`
                 }
             </div>
         `;

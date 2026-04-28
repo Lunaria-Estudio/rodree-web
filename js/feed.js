@@ -1,4 +1,4 @@
-import { db, doc, getDoc, setDoc, updateDoc, increment, collection, getDocs, orderBy, query } from './firebase.js';
+import { fetchPosts, fetchLikeCount, createLikeDoc, updateLikeCount } from './services/firebase-service.js'; // Asegúrate que la carpeta sea plural
 
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => { 
@@ -8,29 +8,12 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 let livePosts = [];
 
-export async function loadPostsFromFirestore() {
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-            id: doc.id,
-            title: data.title,
-            date: data.date,
-            shortText: data.shortText,
-            text: data.body,
-            image: data.imageUrl
-        };
-    });
-}
-
 export async function loadFeedLikeCounts() {
     for (const post of livePosts) {
-        const docRef = doc(db, "likes", post.id);
-        const docSnap = await getDoc(docRef);
+        const count = await fetchLikeCount(post.id);
         const countEl = document.querySelector(`#card-like-${post.id} .card-like-count`);
         if (countEl) {
-            countEl.textContent = docSnap.exists() ? docSnap.data().count : '0';
+            countEl.textContent = count !== null ? count : '0';
         }
     }
 }
@@ -52,7 +35,7 @@ export async function renderFeed() {
     container.innerHTML = skeletonHTML.repeat(3);
 
     
-    livePosts = await loadPostsFromFirestore();
+    livePosts = await fetchPosts();
 
     // PART 2: Empty State
     if (livePosts.length === 0) {
@@ -135,13 +118,12 @@ export const openPost = async (postId) => {
 
     document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'post-view' } }));
 
-    const docRef = doc(db, "likes", postId);
-    const docSnap = await getDoc(docRef);
+    const count = await fetchLikeCount(postId);
     
-    if (docSnap.exists()) {
-        likeBtn.querySelector('.like-count').textContent = docSnap.data().count;
+    if (count !== null) {
+        likeBtn.querySelector('.like-count').textContent = count;
     } else {
-        await setDoc(docRef, { count: 0 });
+        await createLikeDoc(postId);
         likeBtn.querySelector('.like-count').textContent = '0';
     }
 };
@@ -155,16 +137,14 @@ export const handleLike = async (e) => {
     const iconSpan = btn.querySelector('.like-icon');
     const isLiked = localStorage.getItem(`liked-${postId}`) === 'true';
     
-    const docRef = doc(db, "likes", postId);
-    
     if (!isLiked) {
-        await updateDoc(docRef, { count: increment(1) });
+        await updateLikeCount(postId, 1);
         localStorage.setItem(`liked-${postId}`, 'true');
         btn.classList.add('active');
         iconSpan.textContent = '♥';
         countSpan.textContent = parseInt(countSpan.textContent) + 1;
     } else {
-        await updateDoc(docRef, { count: increment(-1) });
+        await updateLikeCount(postId, -1);
         localStorage.removeItem(`liked-${postId}`);
         btn.classList.remove('active');
         iconSpan.textContent = '♡';
