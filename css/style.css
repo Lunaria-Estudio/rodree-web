@@ -1121,7 +1121,6 @@ body.zen-phase-3 .tagline {
 .zen-active #custom-player {
     position: fixed !important;
     z-index: 9999;
-    opacity: 1 !important;
     pointer-events: auto !important;
     margin: 0 !important;
     transition: none !important;

@@ -96,6 +96,36 @@ if (newsletterForm) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    function getTimeOfDay() {
+        const hour = new Date().getHours();
+        if (hour >= 8  && hour < 19) return 'day';
+        if (hour >= 19 && hour < 23) return 'sunset';
+        return 'night';
+    }
+
+    function applyTimeBackground() {
+    const video = document.getElementById('video-bg');
+    if (!video) return;
+
+    const time = getTimeOfDay();
+
+    const config = {
+        day:    { src: 'assets/Video Playa 1080.mp4',     poster: 'assets/poster-day.jpg' },
+        sunset: { src: 'assets/Video Atardecer 1080.mp4', poster: 'assets/poster-sunset.jpg' },
+            night:  { src: 'assets/Video Atardecer 1080.mp4', poster: 'assets/poster-sunset.jpg' }
+    };
+
+    const { src, poster } = config[time];
+    const source = video.querySelector('source');
+
+    if (source.src.endsWith(src)) return; // Ya está cargado el video correcto
+
+    video.poster = poster;
+    source.src = src;
+    video.load();
+}
+
+applyTimeBackground();
     // --- ZEN MODE INITIALIZATION ---
     const IDLE_TIME = 5 * 1000; // 5 segundos para testear// 5 minutos para producción
     let idleTimer;
@@ -111,13 +141,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 window.addEventListener('mousemove', () => {
+    deactivateZenMode();
     clearTimeout(idleTimer);
     idleTimer = setTimeout(activateZenMode, IDLE_TIME);
 });
 
     // 1. Primero disparamos la navegación para que la UI responda instantáneamente
-    document.querySelector('.icon-item[data-section="bio"]')?.classList.add('active');
-    document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'bio' } }));
+    document.querySelector('.icon-item[data-section="home-view"]')?.classList.add('active');
+    document.dispatchEvent(new CustomEvent('switch-view', { detail: { sectionId: 'home-view' } }));
     
     // 2. Activamos el observador de scroll para los elementos de la Bio y otras secciones
     initScrollReveal();

@@ -8,8 +8,16 @@ let phase3Timer = null;
 const getPlayer = () => document.getElementById('custom-player');
 
 function startFloating() {
+    if (window.innerWidth <= 768) return; // No flotar en móvil
+
     const player = getPlayer();
     if (!player || !isZenMode) return;
+
+    const homeView = document.getElementById('home-view');
+    if (!homeView || !homeView.classList.contains('active')) {
+        animationFrame = requestAnimationFrame(startFloating);
+        return;
+    }
 
     const rect = player.getBoundingClientRect();
     const vw = window.innerWidth;
@@ -28,8 +36,11 @@ function startFloating() {
 }
 
 export function activateZenMode() {
-    if (window.innerWidth <= 768) return; // Sin zen mode en móvil
+    const homeView = document.getElementById('home-view');
+    if (!homeView || !homeView.classList.contains('active')) return;
+
     if (isZenMode) return;
+    isZenMode = true;
     document.body.classList.add('zen-active');
 
     const player = getPlayer();
