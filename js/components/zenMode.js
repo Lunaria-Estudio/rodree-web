@@ -28,8 +28,8 @@ function startFloating() {
 }
 
 export function activateZenMode() {
+    if (window.innerWidth <= 768) return; // Sin zen mode en móvil
     if (isZenMode) return;
-    isZenMode = true;
     document.body.classList.add('zen-active');
 
     const player = getPlayer();
@@ -65,7 +65,7 @@ export function deactivateZenMode() {
     cancelAnimationFrame(animationFrame);
 
     const player = getPlayer();
-    if (player) {
+    if (player && window.innerWidth > 768) {
         player.style.left = '';
         player.style.top = '';
     }

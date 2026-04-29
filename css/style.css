@@ -924,116 +924,144 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
 
 /* ==================== RESPONSIVE OPTIMIZATION ==================== */
 @media (max-width: 768px) {
-    /* 1. El Menú se mueve abajo para pulgares cómodos */
+
     .side-menu {
         left: 0;
         top: auto;
         bottom: 0;
         width: 100%;
-        height: 85px; /* Touch target area optimization */
+        height: 72px;
         flex-direction: row;
         justify-content: space-around;
-        padding: 10px 15px 25px 15px;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        align-items: center;
+        padding: 0 8px env(safe-area-inset-bottom, 12px);
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
         transform: none;
-        gap: 0; /* Eliminamos el gap de escritorio para evitar desbordamiento */
+        gap: 0;
         z-index: 1000;
     }
 
-    /* Mostramos el icono de sol en el menú inferior */
     #nav-inicio-mobile {
         display: flex;
-        order: 3; /* Posicionado en el centro */
-        transform: translateY(-18px); /* Elevación sutil */
-        z-index: 1001;
+        order: 3;
+        transform: none;
     }
 
-    /* Estilo específico para el botón central de sol */
     #nav-inicio-mobile img {
-        background: #c8a96e; /* Tono oro/arena cálido */
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        width: 32px;
+        box-shadow: none;
+        filter: invert(1);
+    }
+
+    .icon-item[data-section="bio"]          { order: 1; }
+    .icon-item[data-section="sets-view"]    { order: 2; }
+    .icon-item[data-section="feed-view"]    { order: 4; }
+    .icon-item[data-section="contacto-view"]{ order: 5; }
+
+    .icon-item.active {
+        opacity: 1;
+    }
+    .icon-item.active img {
+        filter: invert(1) drop-shadow(0 0 6px rgba(200, 169, 110, 0.7));
+    }
+
+    .icon-item {
+        gap: 4px;
+        opacity: 0.5;
+        flex: 1;
+        padding: 8px 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .icon-item:hover  { transform: none !important; opacity: 0.75; }
+    .icon-item:active { transform: scale(0.92) !important; }
+
+    .icon-item img  { width: 32px; }
+    .icon-item span { font-size: 0.55rem; letter-spacing: 0.12em; }
+
+    .main-header { display: none !important; }
+
+    .custom-player {
+    width: calc(100vw - 48px);
+    max-width: 400px;
+    height: 72px;
+    padding: 0 20px;
+    bottom: calc(72px + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    top: auto;
+    gap: 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    animation: none; /* Sin flotación en móvil */
+}
+
+.custom-player.playing {
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 8px 32px rgba(200, 169, 110, 0.1);
+    transform: translateX(-50%); /* Mantener centrado cuando playing */
+}
+
+    @keyframes floating-mobile {
+        0%,  100% { transform: translateX(-50%) translateY(0); }
+        50%        { transform: translateX(-50%) translateY(-6px); }
+    }
+
+    @keyframes floating-mobile-playing {
+        0%,  100% { transform: translateX(-50%) translateY(0)    scale(1.01); }
+        50%        { transform: translateX(-50%) translateY(-6px) scale(1.01); }
+    }
+
+    .player-controls { gap: 6px; }
+
+    .play-pause-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 15px;
+        background: rgba(255, 255, 255, 0.08);
         border-radius: 50%;
-        padding: 10px;
-        width: 52px; /* Un poco más grande que los otros */
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        filter: invert(1); /* Mantiene el sol en blanco sobre el fondo tierra */
     }
 
-    /* Reordenamiento de los items laterales */
-    .icon-item[data-section="bio"] { order: 1; }
-    .icon-item[data-section="sets-view"] { order: 2; }
-    .icon-item[data-section="feed-view"] { order: 4; }
-    .icon-item[data-section="contacto-view"] { order: 5; }
-
-    /* Ocultamos el botón de texto "INICIO" del header original */
-    .main-header {
-        display: none !important;
+    .next-btn {
+        font-size: 18px;
+        padding: 10px 8px;
+        opacity: 0.55;
     }
 
-    /* Desactivar animaciones de deslizamiento en móvil */
-    .icon-item:hover {
-        transform: none !important;
-        opacity: 0.7;
+    .track-title {
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 7px;
     }
 
-    /* Feedback de toque simple sin desplazamiento */
-    .icon-item:active {
-        transform: scale(0.95) !important;
-    }
+    .time { font-size: 0.58rem; min-width: 28px; }
 
-    .icon-item { 
-        gap: 4px; 
-        opacity: 0.7; 
-        flex: 1; /* Distribución uniforme para que entren los 4 items */
-        padding: 10px 0;
-    }
-    .icon-item img { width: 38px; }
-    .icon-item span { font-size: 0.6rem; letter-spacing: 0.15em; }
-
-    /* 2. El nombre RODREE se ajusta al ancho del celu */
     .brand-name {
-        font-size: 4.8rem; /* Aumentamos el tamaño para mayor impacto */
+        font-size: 4.8rem;
         margin-bottom: 10px;
         padding: 0 15px;
         line-height: 0.9;
     }
 
     .tagline {
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         letter-spacing: 0.2em;
         padding: 0 20px;
     }
 
-    /* 3. El Reproductor en móvil se achica un poco */
-    .custom-player {
-        width: 94vw;
-        height: 90px; /* Más compacto y estilizado */
-        padding: 0 20px;
-        bottom: 95px; /* Ajustado para la nueva altura del menú */
-        gap: 12px;
-        border-radius: 40px; /* Forma más orgánica para el tamaño reducido */
-    }
-    
-    .player-controls { gap: 8px; }
-    
-    .track-title { font-size: 0.7rem; }
-    .play-pause-btn { 
-        width: 48px; 
-        height: 48px; 
-        background: rgba(255, 255, 255, 0.1); /* Better visibility for touch */
-    }
-    .play-pause-btn { width: 42px; height: 42px; font-size: 16px; }
-    .next-btn { font-size: 20px; }
-    .time { font-size: 0.6rem; min-width: 32px; }
-    
-    .next-btn {
-        padding: 12px; /* Increased hit area for Next button */
-    }
-
-    /* Ajustes generales de sección para móviles */
     .view {
-        padding: 80px 20px 140px; /* Más espacio abajo para no tapar contenido con el player */
+        padding: 80px 20px 160px;
     }
 
     .section-title {
@@ -1041,14 +1069,19 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
         margin-bottom: 30px;
     }
 
-    /* 4. Sets Cards Polish */
     .sets-grid {
         gap: 25px;
         padding: 0 5px;
     }
+
     .set-card {
         padding: 16px;
         border-radius: 28px;
+    }
+
+    #home-view {
+        justify-content: center;
+        padding-bottom: 180px;
     }
 }
 
