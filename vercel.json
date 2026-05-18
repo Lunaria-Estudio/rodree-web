@@ -15,6 +15,7 @@
       "source": "/post/:id",
       "destination": "/index.html"
     },
+    { "source": "/admin", "destination": "/admin.html" },
     {
       "source": "/(.*)",
       "destination": "/index.html"
