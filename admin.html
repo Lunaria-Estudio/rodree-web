@@ -32,6 +32,30 @@
         .btn-logout:hover { border-color: #ff4444; color: #ff4444; opacity: 1; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 
+        .btn-cancel {
+            background: transparent; border: 1px solid #555; color: #999;
+            padding: 12px 30px; border-radius: 4px; cursor: pointer;
+            font-weight: 600; transition: all 0.3s; display: none;
+        }
+        .btn-cancel:hover { border-color: #ff4444; color: #ff4444; }
+
+        .edit-indicator {
+            display: none; font-size: 0.85rem; color: #c8a96e;
+            margin-bottom: 16px; padding: 10px 14px;
+            background: rgba(200, 169, 110, 0.08); border-radius: 4px;
+            border: 1px solid rgba(200, 169, 110, 0.2);
+        }
+
+        .button-row { display: flex; gap: 12px; align-items: center; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .btn-spinner {
+            display: none; width: 14px; height: 14px;
+            border: 2px solid rgba(0,0,0,0.2); border-top-color: #000;
+            border-radius: 50%; animation: spin 0.6s linear infinite;
+            margin-right: 8px; vertical-align: middle;
+        }
+
         /* ── LOGIN SCREEN ── */
         #login-screen {
             display: flex;
@@ -96,7 +120,16 @@
                     <input type="file" id="imageInput" accept="image/*">
                     <img id="preview" src="" alt="Vista previa">
                 </div>
-                <button type="submit" id="submitBtn">Publicar</button>
+                <div class="edit-indicator" id="edit-indicator">
+                    Editando: <span id="editing-title"></span>
+                </div>
+                <div class="button-row">
+                    <button type="submit" id="submitBtn">
+                        <span class="btn-spinner" id="submitSpinner"></span>
+                        <span id="submitText">Publicar</span>
+                    </button>
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
+                </div>
                 <div id="status"></div>
             </form>
 
@@ -127,6 +160,7 @@
         const adminPanel  = document.getElementById('admin-panel');
         const loginError  = document.getElementById('login-error');
         let editingPostId = null;
+        let editingImageUrl = '';
 
         // ── AUTH STATE LISTENER ──
         // Este es el guardián: si hay sesión activa muestra el panel, si no muestra el login
@@ -224,12 +258,28 @@
             });
         }
 
+        // ── CANCELAR EDICIÓN ──
+        function cancelEdit() {
+            editingPostId = null;
+            editingImageUrl = '';
+            document.getElementById('postForm').reset();
+            preview.style.display = 'none';
+            preview.src = '';
+            document.getElementById('submitText').textContent = 'Publicar';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('edit-indicator').style.display = 'none';
+            document.getElementById('status').style.display = 'none';
+        }
+
+        document.getElementById('cancelBtn').addEventListener('click', cancelEdit);
+
         // ── EDITAR POST ──
         window.editPost = async (id) => {
             editingPostId = id;
             const docSnap = await getDoc(doc(db, "posts", id));
             if (docSnap.exists()) {
                 const post = docSnap.data();
+                editingImageUrl = post.imageUrl;
                 document.getElementById('title').value     = post.title;
                 document.getElementById('date').value      = post.date;
                 document.getElementById('shortText').value = post.shortText;
@@ -239,10 +289,14 @@
                 preview.src = post.imageUrl;
                 preview.style.display = 'block';
                 
-                document.getElementById('submitBtn').textContent = 'Actualizar Post';
+                document.getElementById('submitText').textContent = 'Actualizar Post';
+                document.getElementById('cancelBtn').style.display = 'inline-block';
+                document.getElementById('edit-indicator').style.display = 'block';
+                document.getElementById('editing-title').textContent = post.title;
                 // Scroll suave hacia arriba
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+            document.getElementById('status').style.display = 'none';
         };
 
         // ── ELIMINAR POST ──
@@ -259,13 +313,21 @@
         });
 
         // ── PUBLICAR POST ──
+        function setFormLoading(loading) {
+            const inputs = document.querySelectorAll('#postForm input, #postForm textarea');
+            inputs.forEach(el => el.disabled = loading);
+            document.getElementById('imageInput').disabled = loading;
+            document.getElementById('submitBtn').disabled = loading;
+            document.getElementById('cancelBtn').disabled = loading;
+            document.getElementById('submitSpinner').style.display = loading ? 'inline-block' : 'none';
+            document.getElementById('submitText').textContent = loading ? 'Publicando...' : (editingPostId ? 'Actualizar Post' : 'Publicar');
+        }
+
         document.getElementById('postForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
             const status    = document.getElementById('status');
-            submitBtn.disabled    = true;
-            submitBtn.textContent = 'Publicando...';
             status.style.display  = 'none';
+            setFormLoading(true);
 
             try {
                 let imageUrl = "";
@@ -274,9 +336,7 @@
                 if (file) {
                     imageUrl = await uploadToCloudinary(file);
                 } else if (editingPostId) {
-                    // Si estamos editando y no hay archivo nuevo, recuperamos la URL anterior
-                    const docSnap = await getDoc(doc(db, "posts", editingPostId));
-                    imageUrl = docSnap.data().imageUrl;
+                    imageUrl = editingImageUrl;
                 } else {
                     throw new Error("La imagen es obligatoria para nuevos posts.");
                 }
@@ -301,19 +361,15 @@
 
                 status.className      = 'success';
                 status.style.display  = 'block';
-                e.target.reset();
-                preview.style.display = 'none';
-                editingPostId = null;
-                submitBtn.textContent = 'Publicar';
+                cancelEdit();
                 loadPosts();
             } catch (err) {
                 console.error(err);
-                status.textContent   = 'Error al publicar. Revisá la consola.';
+                status.textContent   = 'Error: ' + (err.message || 'Revisá la consola.');
                 status.className     = 'error';
                 status.style.display = 'block';
             } finally {
-                submitBtn.disabled    = false;
-                submitBtn.textContent = 'Publicar';
+                setFormLoading(false);
             }
         });
     </script>

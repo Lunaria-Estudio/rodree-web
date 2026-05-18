@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   const { id } = req.query;
   
   // Valores por defecto (Fallback)
