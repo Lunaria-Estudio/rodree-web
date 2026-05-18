@@ -184,11 +184,19 @@
         };
 
         async function uploadToCloudinary(file) {
+            const sigRes = await fetch('/api/upload', { method: 'POST' });
+            if (!sigRes.ok) throw new Error('No se pudo obtener firma de subida');
+            const { signature, timestamp, api_key, cloud_name } = await sigRes.json();
+
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('upload_preset', 'rodree_unsigned');
-            const res  = await fetch('https://api.cloudinary.com/v1_1/dmevslp0p/image/upload', { method: 'POST', body: formData });
+            formData.append('api_key', api_key);
+            formData.append('timestamp', timestamp);
+            formData.append('signature', signature);
+
+            const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, { method: 'POST', body: formData });
             const data = await res.json();
+            if (!res.ok) throw new Error(data.error?.message || 'Error al subir imagen');
             return data.secure_url;
         }
 
