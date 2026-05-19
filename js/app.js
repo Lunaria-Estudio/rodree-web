@@ -64,6 +64,14 @@ if (newsletterForm) {
         const submitBtn = document.getElementById('sub-btn');
         const messageEl = document.getElementById('sub-message');
 
+        const email = emailInput.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            messageEl.textContent = 'Email inválido.';
+            messageEl.classList.remove('hidden');
+            messageEl.style.color = '#ff4444';
+            return;
+        }
+
         submitBtn.disabled = true;
         const originalBtnText = submitBtn.textContent;
         submitBtn.textContent = 'PROCESANDO...';
@@ -73,7 +81,7 @@ if (newsletterForm) {
             const response = await fetch('/api/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: emailInput.value })
+                body: JSON.stringify({ email })
             });
             const data = await response.json();
             messageEl.textContent = data.message;
