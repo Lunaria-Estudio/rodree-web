@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 }
 
 applyTimeBackground();
+    setInterval(applyTimeBackground, 60 * 60 * 1000); // Check cada 1 hora
     // --- ZEN MODE INITIALIZATION ---
     const IDLE_TIME = 5 * 60 * 1000; // 5 minutos de inactividad
     let idleTimer;
