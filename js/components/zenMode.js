@@ -52,15 +52,15 @@ export function activateZenMode() {
 
     startFloating();
 
-    // Fase 2: menú desaparece al minuto y medio (90 seg)
+    // Fase 2: menú desaparece a los 90 seg
     phase2Timer = setTimeout(() => {
         document.body.classList.add('zen-phase-2');
-    }, 10 * 1000);
+    }, 90 * 1000);
 
-    // Fase 3: título desaparece a los 3 min y medio (210 seg desde fase 1)
+    // Fase 3: título desaparece a los 210 seg (3:30 min)
     phase3Timer = setTimeout(() => {
         document.body.classList.add('zen-phase-3');
-    }, 20 * 1000);
+    }, 210 * 1000);
 }
 
 export function deactivateZenMode() {
