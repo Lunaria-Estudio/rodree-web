@@ -14,11 +14,9 @@ const views = document.querySelectorAll('.view');
 const mainHeader = document.getElementById('main-header');
 
 function switchView(sectionId) {
-    views.forEach(v => v.classList.remove('active'));
-    menuItems.forEach(i => i.classList.remove('active'));
+    const currentView = document.querySelector('.view.active');
 
-    const target = document.getElementById(sectionId);
-    if (target) target.classList.add('active');
+    menuItems.forEach(i => i.classList.remove('active'));
 
     const activeItem = document.querySelector(`.icon-item[data-section="${sectionId}"]`);
     if (activeItem) activeItem.classList.add('active');
@@ -37,6 +35,18 @@ function switchView(sectionId) {
             player.style.pointerEvents = "none";
         }
     }
+
+    if (currentView && currentView.id !== sectionId) {
+        currentView.classList.remove('active');
+        currentView.classList.add('exiting');
+        setTimeout(() => currentView.classList.remove('exiting'), 300);
+    }
+
+    const target = document.getElementById(sectionId);
+    if (target) {
+        setTimeout(() => target.classList.add('active'), 50);
+    }
+
     document.querySelector('.content').scrollTop = 0;
 }
 
@@ -126,11 +136,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { src, poster } = config[time];
     const source = video.querySelector('source');
 
-    if (source.src.endsWith(src)) return; // Ya está cargado el video correcto
+    if (source.src.endsWith(src)) return;
 
-    video.poster = poster;
-    source.src = src;
-    video.load();
+    video.style.opacity = '0';
+    setTimeout(() => {
+        video.poster = poster;
+        source.src = src;
+        video.load();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            video.style.opacity = '1';
+        }));
+    }, 400);
 }
 
 applyTimeBackground();
@@ -161,6 +177,20 @@ window.addEventListener('mousemove', () => {
     
     // 2. Activamos el observador de scroll para los elementos de la Bio y otras secciones
     initScrollReveal();
+
+    // --- BIO 3D TILT ---
+    const bioImage = document.querySelector('.bio-image');
+    if (bioImage) {
+        bioImage.addEventListener('mousemove', (e) => {
+            const rect = bioImage.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            bioImage.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+        });
+        bioImage.addEventListener('mouseleave', () => {
+            bioImage.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+    }
 
     // 3. Cargamos el resto de los componentes
     document.dispatchEvent(new CustomEvent('render-sets'));

@@ -24,12 +24,12 @@ body {
     font-weight: 300;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
-    cursor: url('../assets/cursor_palmera_original.png'), auto;
+    cursor: url('../assets/cursor_palmera.svg'), auto;
 }
 
 /* Cursor en elementos interactivos */
 a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
-    cursor: url('../assets/cursor_palmera_original.png'), pointer !important;
+    cursor: url('../assets/cursor_palmera.svg'), pointer !important;
 }
 
 /* ==================== FONDO ==================== */
@@ -49,6 +49,7 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     object-fit: cover;
     object-position: center;
     filter: brightness(1.12) saturate(1.2);
+    transition: opacity 0.8s ease;
 }
 
 .overlay {
@@ -109,6 +110,14 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
 .icon-item:active {
     transform: translateX(10px) scale(0.96);
     transition: transform 0.1s var(--transition-luxury);
+}
+
+.icon-item.active {
+    opacity: 1;
+}
+
+.icon-item.active img {
+    filter: invert(1) drop-shadow(0 0 8px rgba(200, 169, 110, 0.7));
 }
 
 /* ==================== CONTENIDO CENTRAL ==================== */
@@ -318,6 +327,16 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes viewExit {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+.view.exiting {
+    display: flex !important;
+    animation: viewExit 0.3s ease forwards;
+    pointer-events: none;
+}
+
 /* ==================== CONTACTO (SOCIAL HUB) ==================== */
 .contact-container {
     background: var(--glass-bg);
@@ -460,6 +479,8 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     position: relative;
     overflow: hidden;
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
 }
 
 /* Bio photo display */
@@ -646,8 +667,14 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     border-radius: 24px;
     overflow: hidden;
     text-align: left;
-    transition: transform 0.4s var(--transition-luxury);
+    transition: transform 0.4s var(--transition-luxury), border-color 0.4s ease, box-shadow 0.4s ease;
     backdrop-filter: blur(10px);
+}
+
+.feed-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.04);
 }
 
 .feed-date {
@@ -987,6 +1014,10 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
 
     .main-header { display: none !important; }
 
+    .overlay {
+        backdrop-filter: blur(1px);
+    }
+
     .custom-player {
     width: calc(100vw - 48px);
     max-width: 400px;
@@ -1000,8 +1031,8 @@ a, button, .icon-item, .play-pause-btn, .progress-bar, .feed-card {
     gap: 12px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
     animation: none; /* Sin flotación en móvil */
@@ -1104,18 +1135,16 @@ body.zen-phase-2 .side-menu,
 body.zen-phase-2 .main-header {
     opacity: 0 !important;
     visibility: hidden !important;
-    filter: blur(8px);
     pointer-events: none;
-    transition: opacity 2s ease-in-out, visibility 2s, filter 2s ease-in-out;
+    transition: opacity 2s ease-in-out, visibility 2s;
 }
 
 body.zen-phase-3 .brand-name,
 body.zen-phase-3 .tagline {
     opacity: 0 !important;
     visibility: hidden !important;
-    filter: blur(12px);
     pointer-events: none;
-    transition: opacity 2s ease-in-out, visibility 2s, filter 2s ease-in-out;
+    transition: opacity 2s ease-in-out, visibility 2s;
 }
 
 .zen-active #custom-player {
@@ -1133,4 +1162,12 @@ body.zen-phase-3 .tagline {
     transition: opacity 2s ease-in-out, 
                 visibility 2s ease-in-out, 
                 filter 2s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
